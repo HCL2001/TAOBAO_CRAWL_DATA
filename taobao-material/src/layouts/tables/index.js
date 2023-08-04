@@ -67,6 +67,11 @@ function Search() {
         setSelectedRowIds([]);
         console.log(response.data);
         console.log("Yêu cầu đã được gửi thành công!");
+        toast.success("Yêu cầu đã được gửi thành công!",{
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+        });
       } catch (error) {
         if (error.message === "Request failed with status code 403") {
           window.location.reload();
@@ -211,7 +216,8 @@ function Search() {
               borderBottom: "none",
             },
             "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.primary.light,
+              backgroundColor: theme.palette.info.light,
+              color: "white!important",
             },
             "& .MuiDataGrid-footerContainer": {
               backgroundColor: theme.palette.background.alt,
@@ -248,15 +254,14 @@ function Search() {
                 style={{ width: 200, minWidth: 200, maxWidth: 800 }}
                 onKeyDown={handleKeyDown}
               />
-              <IconButton onClick={handleSubmit}>
+              <IconButton >
                 {loading ? <CircularProgress size={24} /> : <FilterAltIcon />}
               </IconButton>
               <Button
                 variant="contained"
                 color="primary"
-                style={{ marginLeft: "auto" }}
-                onClick={handleModal}
-                disabled={isButtonDisabled}
+                style={{ marginLeft: "auto" , color: "white" }}
+                onClick={handleSubmit}
                 endIcon={<ChevronRightIcon />}
               >
                 Submit

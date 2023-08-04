@@ -1,7 +1,7 @@
 HOST = "localhost"
 PORT = "3306"
 USER_NAME = "root"
-PASSWORD = "123456"
+PASSWORD = "Tanghieu9999"
 DB_NAME = "taobao"
 DRIVER_BD = "mysql+mysqlconnector"
 
