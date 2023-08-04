@@ -247,3 +247,62 @@ def get_data_from_db(page_number=1, items_per_page=10):
         return None
     finally:
         session.close()
+
+def get_detail(detail_link, name):
+    global detailLinkValue, listName
+    product_list = []
+    detailLinkValue = {}
+    headers = {
+        'Cookie': 't=ec0d5bd680cef4c43c9f71708db31058; cna=BRxOHd8VWAICAXGhLjZWD5TR; xlly_s=1; sgcookie=E100H0swvfyYsdVvyTSCrnObIsrV9Aq5T474B8w3cwP5nWHOe6gtbUcYZOtKadjZUZn5FaAW%2BQ1uJQLhLtsuUfTrufcHNomxvIPXmNQua6gPTPE%3D; uc3=vt3=F8dCsGCl3JWCOZIAnLM%3D&id2=UUpgQEvyiTEr4C708g%3D%3D&lg2=V32FPkk%2Fw0dUvg%3D%3D&nk2=F5RDLjqWCLCCNe6Q0ac%3D; lgc=tb627551502528; uc4=id4=0%40U2gqz6QY%2B2LU45CVgCnTHhyjjD3pXce2&nk4=0%40FY4I7WSY2SzxeSCD9wJSplBYHJHaEX%2BF0g%3D%3D; tracknick=tb627551502528; _cc_=WqG3DMC9EA%3D%3D; thw=xx; mt=ci=0_1; _uetsid=2e532be02f4f11ee80918f9d985d2979; _uetvid=dc870040ea5911ed8305a55f0f12c1b7; _m_h5_tk=bffc85d673ab2f3d0eebe9f130993d22_1690891184157; _m_h5_tk_enc=10d0b322cedd523f3f588213614f9e04; hng=VN%7Czh-CN%7CVNM%7C704; _gid=GA1.2.1343417350.1690881464; _ga=GA1.1.658097477.1690881463; _ga_YFVFB9JLVB=GS1.1.1690881463.1.0.1690881469.0.0.0; _ga_JBTWV3NHSY=GS1.1.1690881463.1.0.1690881469.54.0.0; cookie2=1c358ce26fd4234017e383ab667ef88d; _tb_token_=f60ee6eeeb3fe; tfstk=dEwBfWDMPeYQ2aHskBsa1qKLCcD7Oy6VF3i8mupe2vHdF0U45bpPtvlSFP3aL2rEpTi8uPG8z4rex544DpyFtYJSKYDRuZWV3MqnEYBC-c7VkXYd0C-O3tr3xHod0lBVrtfd4GGRnpx5Pl76Bd9ACFkQHiQ5PRiOxqEBJpobBDGikkeBnO5v3qs8BQtsiLisuGs6ZQfuLqHO.; l=fBIQOzNINiq0KRtBBO5Churza77O2COb8sPzaNbMiIEGa6Th1elM8NC61q3pRdtjQT5Y1etyzs0aOdhw5Ja38xOe7pP-OC0eQKp28eM3N7AN.; isg=BGhow2fRmMKnVLTcoTZoExvVOVZ6kcybJYC5NSKc4OPWfQnnyqPpKsX_dQ2NzYRz; x5sec=7b22617365727665723b32223a226137316262343934343964303833653439366131306266303238643831333839434b667a703659474550666873386175362b3461476738794d6a45324d6a41354d544d314d7a67774f7a4969436d4e6863484e736157526c646a49776b4b48466e76762f2f2f2f2f41554144227d',
+        'Referer': 'https://item.taobao.com/item.htm?id=679086829628&ns=1&abbucket=12#detail',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Cache-Control': 'max-age=0',
+        'Sec-Ch-Ua': '"Not/A)Brand";v="99", "Google Chrome";v="115", "Chromium";v="115"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"Windows"',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+    }
+
+    url = detail_link
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        content = response.text
+        soup = BeautifulSoup(content, "html.parser")
+        li_elements_with_data_value = soup.find_all("li", attrs={"data-value": True})
+        script_test = soup.find_all("script")
+        print(script_test)
+        for script in script_test:
+            script_script = script.string
+            if script_script and "window._config" in script_script:
+                # print(script_script)
+                startIndex = script_script.find("url")
+                endIndex = script_script.find("languageConfigJson")
+                json_content = script_script[startIndex + 6: endIndex]
+                detailValue(json_content)
+            if script_script and "window._config" in script_script:
+                print("Url " + script_script[200])
+        listName = {}
+        # for li in li_elements_with_data_value:
+        #     data_value = li["data-value"]
+        #     value = li.span.text.strip()
+        #     listName[data_value] = value
+        # script_tags = soup.find_all("script")
+        # for script_tag in script_tags:
+        #     script_content = script_tag.string
+        #     if script_content and "Hub.config.set" in script_content:
+        #         start_index = script_content.find("wholeSibUrl      : '")
+        #         end_index = script_content.find("tradeContract',")
+        #         json_content = script_content[start_index + 20: end_index]
+        #         detailLinkValue = "https:" + json_content
+    # detailLink(url, detailLinkValue, listName)
+    return detail_link
+
+def detailValue (linkDetail: str):
+    content = linkDetail[0: 181]
+    print("https: " + content)
