@@ -74,3 +74,12 @@ async def search_taobao(keyWord: str):
 @app.post('/expired/')
 def check_token_expire(check_token: schemas.CheckToken):
     return check_token_expired(check_token.token)
+
+@app.get("/list")
+async def get_list(page_number: int = 1, items_per_page: int = 10):
+    return crud.get_data_from_db(page_number, items_per_page)
+
+@app.get("/detail")
+async def get_detail(detail_link, name):
+    print(detail_link)
+    return crud.get_detail(detail_link, name)
