@@ -34,6 +34,7 @@ import { API_BASE_URL } from "assets/api/api";
 import IconButton from "@mui/material/IconButton";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 function Search() {
   const authToken = JSON.parse(JSON.stringify(localStorage.getItem("token")));
   const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -67,10 +68,10 @@ function Search() {
         setSelectedRowIds([]);
         console.log(response.data);
         console.log("Yêu cầu đã được gửi thành công!");
-        toast.success("Yêu cầu đã được gửi thành công!",{
-        position: toast.POSITION.TOP_CENTER,
-        autoClose: 3000,
-        hideProgressBar: true,
+        toast.success("Yêu cầu đã được gửi thành công!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
         });
       } catch (error) {
         if (error.message === "Request failed with status code 403") {
@@ -254,13 +255,13 @@ function Search() {
                 style={{ width: 200, minWidth: 200, maxWidth: 800 }}
                 onKeyDown={handleKeyDown}
               />
-              <IconButton >
+              <IconButton>
                 {loading ? <CircularProgress size={24} /> : <FilterAltIcon />}
               </IconButton>
               <Button
                 variant="contained"
                 color="primary"
-                style={{ marginLeft: "auto" , color: "white" }}
+                style={{ marginLeft: "auto", color: "white" }}
                 onClick={handleSubmit}
                 endIcon={<ChevronRightIcon />}
               >
