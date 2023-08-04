@@ -34,6 +34,7 @@ import { API_BASE_URL } from "assets/api/api";
 import IconButton from "@mui/material/IconButton";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 function Search() {
   const authToken = JSON.parse(JSON.stringify(localStorage.getItem("token")));
   const [selectedRowIds, setSelectedRowIds] = useState([]);
@@ -67,6 +68,11 @@ function Search() {
         setSelectedRowIds([]);
         console.log(response.data);
         console.log("Yêu cầu đã được gửi thành công!");
+        toast.success("Yêu cầu đã được gửi thành công!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
       } catch (error) {
         if (error.message === "Request failed with status code 403") {
           window.location.reload();
@@ -211,7 +217,8 @@ function Search() {
               borderBottom: "none",
             },
             "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.primary.light,
+              backgroundColor: theme.palette.info.light,
+              color: "white!important",
             },
             "& .MuiDataGrid-footerContainer": {
               backgroundColor: theme.palette.background.alt,
@@ -254,7 +261,7 @@ function Search() {
               <Button
                 variant="contained"
                 color="primary"
-                style={{ marginLeft: "auto" }}
+                style={{ marginLeft: "auto", color: "white" }}
                 onClick={handleModal}
                 disabled={isButtonDisabled}
                 endIcon={<ChevronRightIcon />}
