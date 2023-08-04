@@ -162,28 +162,26 @@ async def crawl_taobao(keyWord: str):
                     for item in data:
                         print(item)
                         sys.stdout.flush()
-                        # count = sum(1 for link in links if link.link == item['shopLink'])
+
                         name = translator.translate(item['raw_title'], dest='vi')
-                        # search_product = models.SearchProduct(name=name.text, price=item['view_price'], link='https:'+item['shopLink'], image='https:'+item['pic_url'])
+                        link = 'https:' + item['detail_url']
+                        if 'click.simba.taobao' in link:
+                            print(f"Ignoring item '{name}' as it contains 'click.taobao' link.")
+                            continue
+
                         objectDto = {
                             'id': counter,
                             'name': name.text,
-                            'link': 'https:'+item['detail_url'],
+                            'link': link,
                             'price': item['view_price'],
                             'image': 'https:'+item['pic_url'],
                             'shopName': item['shopName'],
                         }
                         counter += 1
                         product_list.append(objectDto)
-                        # if count == 0:
-                        #     saveSearch.append(search_product)
                         if counter == 6:    #Số sản phẩm cần search -1
                             break
                     save_list_data_to_db(product_list)
-                    # print(saveSearch)
-                    # sys.stdout.flush()
-                    # db.add_all(saveSearch)
-                    # db.commit()
                 except json.JSONDecodeError as e:
                     print(e)
     return product_list
