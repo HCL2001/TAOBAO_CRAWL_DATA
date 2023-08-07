@@ -82,4 +82,4 @@ async def get_list(page_number: int = 1, items_per_page: int = 10):
 @app.get("/detail")
 async def get_detail(detail_link, name):
     print(detail_link)
-    return crud.get_detail(detail_link, name)
+    return await crud.get_detail(detail_link, name)
