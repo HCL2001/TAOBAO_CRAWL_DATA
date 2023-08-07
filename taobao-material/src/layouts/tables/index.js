@@ -8,6 +8,7 @@ import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import { Link as RouterLink } from "react-router-dom";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
@@ -159,6 +160,23 @@ function Search() {
       field: "name",
       headerName: "Name",
       width: 400,
+      renderCell: (params) => {
+        const { id, name } = params.row;
+        // Điều hướng tới trang chi tiết khi click vào cột "Name"
+        return (
+          <RouterLink
+            to={`/detail/${id}`} // Sử dụng to={`/detail/${id}`} để định nghĩa đường dẫn
+            style={{
+              color: "white",
+              textDecoration: "none",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {name}
+          </RouterLink>
+        );
+      },
     },
     {
       field: "price",
