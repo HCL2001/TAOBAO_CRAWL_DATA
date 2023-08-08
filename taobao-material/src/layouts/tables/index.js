@@ -258,16 +258,16 @@ function Search() {
               <IconButton onClick={handleSubmit}>
                 {loading ? <CircularProgress size={24} /> : <FilterAltIcon />}
               </IconButton>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ marginLeft: "auto", color: "white" }}
-                onClick={handleModal}
-                disabled={isButtonDisabled}
-                endIcon={<ChevronRightIcon />}
-              >
-                Submit
-              </Button>
+              {/*<Button*/}
+              {/*  variant="contained"*/}
+              {/*  color="primary"*/}
+              {/*  style={{ marginLeft: "auto", color: "white" }}*/}
+              {/*  onClick={handleModal}*/}
+              {/*  disabled={isButtonDisabled}*/}
+              {/*  endIcon={<ChevronRightIcon />}*/}
+              {/*>*/}
+              {/*  Submit*/}
+              {/*</Button>*/}
             </Box>
           </Grid>
           <DataGrid

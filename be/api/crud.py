@@ -15,7 +15,6 @@ import database
 import models
 import constants
 
-
 async def register():
     product_list = []
     headers = {
@@ -103,6 +102,9 @@ async def crawl_taobao(keyWord: str):
     translator = Translator()
     product_list = []
 
+    # Dịch keyWord sang tiếng Trung giản thể
+    keyWord_zh = translator.translate(keyWord, dest='zh-CN').text
+
     cookie_parameters = {
         'JSESSIONID': 'A5EA6A1FC6ED9491E8BFE168344D9E7C',
         '_cc_': 'VFC%2FuZ9ajQ%3D%3D',
@@ -142,9 +144,9 @@ async def crawl_taobao(keyWord: str):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
-    encoded_keyWord = urllib.parse.quote(keyWord, safe='')
+    encoded_keyWord = urllib.parse.quote(keyWord_zh, safe='')
     print(encoded_keyWord)
-    url = f"https://s.taobao.com/search?q={encoded_keyWord}&type=p&tmhkh5=&from=sea_1_searchbutton&catId=100&spm=a2141.241046-vn.searchbar.d_2_searchbox"
+    url = f"https://s.taobao.com/search?q={encoded_keyWord2}&type=p&tmhkh5=&from=sea_1_searchbutton&catId=100&spm=a2141.241046-vn.searchbar.d_2_searchbox"
     counter = 1
     # saveSearch = []
     # links = db.query(models.SearchProduct).all()
