@@ -1,7 +1,6 @@
 import asyncio
 import urllib.parse
 import json
-import aiohttp
 from googletrans import Translator
 import urllib.parse
 from datetime import datetime
@@ -361,5 +360,3 @@ def detailValue(linkDetail:str):
             listPromotion[key.strip(';')] = value[0]['price']
         print("List promotion " + str(listPromotion))
         del listPromotion['def']
-        count = 0
-        product_list = []
