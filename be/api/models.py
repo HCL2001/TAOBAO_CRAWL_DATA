@@ -8,6 +8,7 @@ class SearchProduct(Base):
     __tablename__ = "search_product"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    product_id = Column(String(255))
     name = Column(String(1020))
     price = Column(String(50))
     link = Column(Text)  # Sử dụng cột TEXT cho các URL dài

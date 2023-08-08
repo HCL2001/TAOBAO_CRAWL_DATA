@@ -109,6 +109,19 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
+  // const getRoutes = (allRoutes) =>
+  //   allRoutes.map((route) => {
+  //     if (route.collapse) {
+  //       return getRoutes(route.collapse);
+  //     }
+
+  //     if (route.route) {
+  //       return <Route exact path={route.route} element={route.component} key={route.key} />;
+  //     }
+
+  //     return null;
+  //   });
+
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
       if (route.collapse) {
@@ -117,6 +130,10 @@ export default function App() {
 
       if (route.route) {
         return <Route exact path={route.route} element={route.component} key={route.key} />;
+      }
+
+      if (route.detailRoute) {
+        return <Route path={route.detailRoute} element={route.detailComponent} key={route.key} />;
       }
 
       return null;
