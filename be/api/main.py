@@ -16,7 +16,7 @@ import jwt
 # from crontab import CronTab
 from security import verify_password, generate_token, validate_token, check_token_expired
 from googletrans import *
-# import constant
+
 
 models.Base.metadata.create_all(bind=engine)
 
