@@ -391,14 +391,3 @@ def detailValue(linkDetail:str):
         del listPromotion['def']
         count = 0
         product_list = []
-
-        # for key, value in listPrice.items():
-        #     objectProductDto = {
-        #         'id': count,
-        #         'price': value,
-        #         'promotion': listPromotion.get(key, "No promotion"),
-        #         'stock': stockProduct['sku'].get(key, {}).get('stock', 0),
-        #     }
-        #     count += 1
-        #
-        # print("Objects " + str(objectProduct))
