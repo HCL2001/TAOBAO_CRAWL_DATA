@@ -58,11 +58,14 @@ function ListData() {
     setLoading(true);
     if (form.search) {
       try {
-        const response = await axios.get(API_BASE_URL + "/search/" + form.search, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        const response = await axios.get(
+          `${API_BASE_URL}/list?page_number=${currentPage}&items_per_page=${itemsPerPage}`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
         setData(response.data);
         setSelectedRowIds([]);
         console.log(response.data);
