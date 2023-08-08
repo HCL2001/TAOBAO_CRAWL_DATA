@@ -80,8 +80,10 @@ def get_detail(id):
         return "id is null"
     return crud.detail(id)
 
+
 # @app.get("/get-data")
 # async def get_data(page_number: int = 1, items_per_page: int = 10, db: Session = Depends(get_db)):
 #     data = crud.get_data_from_db(page_number, items_per_page, db)
 #     return data
+
 
