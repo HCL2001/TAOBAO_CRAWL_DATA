@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 import database
 import models
 import constants
+
 import requests
 import ProductDetailDto
 
@@ -110,6 +111,8 @@ async def crawl_taobao(keyWord: str):
     translator = Translator()
     product_list = []
 
+    chinese_keyword = translator.translate(keyWord, src=constants.VIETNAMESE, dest=constants.CHINESE).text
+
     cookie_parameters = {
         'JSESSIONID': 'A5EA6A1FC6ED9491E8BFE168344D9E7C',
         '_cc_': 'VFC%2FuZ9ajQ%3D%3D',
@@ -149,8 +152,8 @@ async def crawl_taobao(keyWord: str):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
-    encoded_keyWord = urllib.parse.quote(keyWord, safe='')
-    # print(encoded_keyWord)
+    encoded_keyWord = urllib.parse.quote(chinese_keyword, safe='')
+    print(encoded_keyWord)
     url = f"https://s.taobao.com/search?q={encoded_keyWord}&type=p&tmhkh5=&from=sea_1_searchbutton&catId=100&spm=a2141.241046-vn.searchbar.d_2_searchbox"
     counter = 1
     # saveSearch = []
