@@ -48,11 +48,6 @@ def get_db():
     finally:
         db.close()
 
-
-@app.get("/search/{keyWord}")
-async def search_taobao(keyWord: str, db: Session = Depends(get_db)):
-    return await crud.crawl_taobao(keyWord=keyWord)
-
 @app.post('/login')
 def login(request_data: schemas.LoginRequest, db: Session = Depends(get_db)):
     print(f'[x] request_data: {request_data.__dict__}')
@@ -80,7 +75,8 @@ async def get_list(page_number: int = 1, items_per_page: int = 10):
     return crud.get_data_from_db(page_number, items_per_page)
 
 @app.get("/detail")
-async def get_detail(detail_link, name):
-    if(detail_link == "" or detail_link == None):
-        return "Link is null"
-    return await crud.get_detail(detail_link, name)
+def get_detail(id):
+    if(id == "" or id == None):
+        return "id is null"
+    return crud.detail(id)
+
