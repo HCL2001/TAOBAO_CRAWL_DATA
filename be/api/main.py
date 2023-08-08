@@ -16,7 +16,8 @@ import jwt
 # from crontab import CronTab
 from security import verify_password, generate_token, validate_token, check_token_expired
 from googletrans import *
-# import constant
+import constants
+import re
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -69,7 +70,9 @@ def login(request_data: schemas.LoginRequest, db: Session = Depends(get_db)):
 
 @app.get("/taobao/{keyWord}", dependencies=[Depends(validate_token)])
 async def search_taobao(keyWord: str):
-    return await crud.crawl_taobao(keyWord)
+    translator = Translator()
+    chinese_keyword = translator.translate(keyWord, src=constants.VIETNAMESE, dest=constants.CHINESE)
+    return await crud.crawl_taobao(chinese_keyword.text)
 
 @app.post('/expired/')
 def check_token_expire(check_token: schemas.CheckToken):
