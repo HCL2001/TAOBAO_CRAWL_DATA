@@ -78,5 +78,9 @@ async def get_list(page_number: int = 1, items_per_page: int = 10):
 def get_detail(id):
     if(id == "" or id == None):
         return "id is null"
-    return crud.detail(id)
+    return crud.detail()
+
+@app.get("/demo")
+def test_function():
+    return crud.demo_function()
 
