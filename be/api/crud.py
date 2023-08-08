@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 import database
 import models
 import constants
+import requests
 
 
 async def register():
@@ -174,6 +175,7 @@ async def crawl_taobao(keyWord: str):
 
                         objectDto = {
                             'id': counter,
+                            'productId': item['nid'],
                             'name': name.text,
                             'link': link,
                             'price': item['view_price'],
@@ -218,7 +220,8 @@ def save_list_data_to_db(list_data, error_callback=None):
                 continue
 
             if not check_if_record_exists(session, name):
-                product = models.SearchProduct(name=name,
+                product = models.SearchProduct(product_id=item['productId'],
+                                               name=name,
                                                price=item['price'],
                                                link=link,
                                                image=item['image'])
@@ -250,144 +253,16 @@ def get_data_from_db(page_number=1, items_per_page=10):
         return None
     finally:
         session.close()
+def detail(id):
+    url = "http://api.tmapi.top/taobao/item_detail"
 
-async def get_detail(detail_link, name):
-    global detailLinkValue, listName
-    product_list = []
-    detailLinkValue = {}
+    querystring = {"apiToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6Imxvbmdob2FuZzA5MTEiLCJDb21pZCI6bnVsbCwiUm9sZWlkIjpudWxsLCJpc3MiOiJ0bWFwaSIsInN1YiI6Imxvbmdob2FuZzA5MTEiLCJhdWQiOlsiIl19.fGIqSCT0WdxU7I_v0u-_t7fv6YCI9z75C5mGV9dXF_s", "item_id": id}
 
-    cookie_parameters = {
-        'x5sec': '7b22617365727665723b32223a2239616662393463663037323638303065323366313366653465613738663961374350444f78715947454b445a6d2f656b3435667957526f504d6a49784e6a49774f54457a4e544d344d4473784967706a5958427a62476c6b5a5859794d4a4368785a37372f2f2f2f2f77464141773d3d227d',
-        'l': 'fBLr9CzeNC7xSNsxBOfZnurza77OSIRxDuPzaNbMi9fP_WfB5dQAW19b7gY6C3HNF6lXR3lbLYeDBeYBq3K-nxvOa6Fy_CkmndLHR35..',
-        '_m_h5_tk_enc': 'af9a4712d48967ab44843e0323531599',
-        '_tb_token_': '368053b98b3bf',
-        'lgc': 'tb627551502528',
-        'uc4': 'id4=0%40U2gqz6QY%2B2LU45CVgCnTHhyjgZBJma0i&nk4=0%40FY4I7WSY2SzxeSCD9wJSplBYHJwWmWNH2Q%3D%3D',
-        'tracknick': 'tb627551502528',
-        't': 'bf616c40abc38c46dc7cf35e95e63da4',
-        'uc3': 'nk2=F5RDLjqWCLCCNe6Q0ac%3D&vt3=F8dCsGCg2j4HH2X4eQ0%3D&id2=UUpgQEvyiTEr4C708g%3D%3D&lg2=W5iHLLyFOGW7aA%3D%3D',
-        'uc1': 'cookie14=Uoe9bF67cjju2A%3D%3D',
-        'hng': 'VN%7Czh-CN%7CVNM%7C704',
-        'ucn': 'center',
-        'cna': 'GEipHHUOB0wCAQ6hEtIJarLh',
-        'uc1': 'cookie14=Uoe9bF67cRljTA%3D%3D',
-        'isg': 'BI2N3KXa1b0QYXFiZdr0Cfg3nKkHasE8N8EmUM8SzSSSxq14l7g5DIlUNUKgWtn0',
-        '_samesite_flag_': 'true',
-        'l': 'fBEJJT7RNxGU8vDQBOfanurza779SIRxDuPzaNbMi9fPOXC65C4cW19b7i8BCnHNFsgeR3lbLYeDBeYBqnXH3CPie5DDwIHmnmOk-Wf..',
-        'isg': 'BPLyKeLAwtzz3f6O1NFYELkdQzjUg_YdVNjpAbzLHqWQT5JJpBNGLfiuOvNzY261',
-        'tfstk': 'dYTJEyZhCxDuiGSpR_nm8ObZn0cmIUdyMLR_-9XuAKpvECtlqB6hJppppTjIUaYpHLA6qgAB-6TdzExu-TDPJB9GJADiSVAyaa7IIAVxwQRzFfq0GV0MaQPlNfAjSv7iBt6zlY2Ea5UMSeCSA5Rj8jCXy_IRduXYJPhhwgB6NtF7NOJpSFpTURXOtuGxMkrFVs8pwjVc.',
-        'cdpid': 'UUpgQEvyiTEr4C708g%253D%253D',
-        'ucn': 'center',
-        'cna': 'GEipHHUOB0wCAQ6hEtIJarLh',
-        'uc1': 'cookie14=Uoe9bF67cRljTA%3D%3D',
-        'isg': 'BI2N3KXa1b0QYXFiZdr0Cfg3nKkHasE8N8EmUM8SzSSSxq14l7g5DIlUNUKgWtn0',
-        '_samesite_flag_': 'true',
-        'l': 'fBEJJT7RNxGU8vDQBOfanurza779SIRxDuPzaNbMi9fPOXC65C4cW19b7i8BCnHNFsgeR3lbLYeDBeYBqnXH3CPie5DDwIHmnmOk-Wf..',
-        'isg': 'BPLyKeLAwtzz3f6O1NFYELkdQzjUg_YdVNjpAbzLHqWQT5JJpBNGLfiuOvNzY261',
-        'tfstk': 'dYTJEyZhCxDuiGSpR_nm8ObZn0cmIUdyMLR_-9XuAKpvECtlqB6hJppppTjIUaYpHLA6qgAB-6TdzExu-TDPJB9GJADiSVAyaa7IIAVxwQRzFfq0GV0MaQPlNfAjSv7iBt6zlY2Ea5UMSeCSA5Rj8jCXy_IRduXYJPhhwgB6NtF7NOJpSFpTURXOtuGxMkrFVs8pwjVc.',
-        'cdpid': 'UUpgQEvyiTEr4C708g%253D%253D',
-        'ucn': 'center',
-        'uc3': 'nk2=F5RDLjqWCLCCNe6Q0ac%3D&vt3=F8dCsGCg2j4K6APJSMg%3D&lg2=UIHiLt3xD8xYTw%3D%3D&id2=UUpgQEvyiTEr4C708g%3D%3D',
-        'uc4': 'id4=0%40U2gqz6QY%2B2LU45CVgCnTHhyjgZBJlJ9d&nk4=0%40FY4I7WSY2SzxeSCD9wJSplBYHJwWmW5zVQ%3D%3D',
-        'x5sec': '7b22617365727665723b32223a226539313338386538643739643266303964613031653838663861323366623766434f4b4d6a71594745506e57343658446c59476b65786f504d6a49784e6a49774f54457a4e544d344d4473324d4f79586a4e4d4451414d3d227d',
-        'xlly_s': '1',
-        'sgcookie': 'E1005%2Bb0FUWGff0BEjd7vRqEMlPwY3cs692XjufvMfmnHe8jWW0CAzNMxbFv3kP7UDINW6e93w9mP5gpqfUoW3EbwV6qexWQqCdP2otrO2edgbQ%3D',
-        'sca': '8c8571f7',
-        'OVS_HIGH_VALUE_INVITATION_CODE': 'WDPNQP',
-        '_ga_JBTWV3NHSY': 'GS1.1.1691461322.16.1.1691462311.60.0.0',
-    }
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
+    response = requests.get(url, params=querystring)
 
-    url = detail_link
-    await asyncio.sleep(3)
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url, headers=headers, cookies=cookie_parameters) as resp:
-            content = await resp.text()
-            soup = BeautifulSoup(content, 'html.parser')
-            print(soup)
-            li_elements_with_data_value = soup.find_all("li", attrs={"data-value": True})
-        listName = {}
-        for li in li_elements_with_data_value:
-            data_value = li["data-value"]
-            value = li.span.text.strip()
-            listName[data_value] = value
-        script_tags = soup.find_all("script")
-        for script_tag in script_tags:
-            script_content = script_tag.string
-            if script_content and "Hub.config.set" in script_content:
-                start_index = script_content.find("wholeSibUrl      : '")
-                end_index = script_content.find("tradeContract',")
-                json_content = script_content[start_index + 20: end_index]
-                detailLinkValue = "https:" + json_content
-    if not detailLinkValue:
-        return "Out of session"
-    detailValue(detailLinkValue)
-    return detail_link
+    if response.status_code != 200:
+        return "False when getting detail"
 
-def detailValue(linkDetail:str):
-    global objectProductDto
-    print(linkDetail)
-    product_list = []
-    cookie_parameters = {
-        'JSESSIONID': 'A5EA6A1FC6ED9491E8BFE168344D9E7C',
-        '_cc_': 'VFC%2FuZ9ajQ%3D%3D',
-        '_nk_': 'tb627551502528',
-        '_samesite_flag_': 'true',
-        '_tb_token_': 'ee73d9beb6709',
-        'atpsida': 'c1ba942fb3fe1cbf03e466a6_1690536928_9',
-        'aui': '2216209135380',
-        '_tb_token_': '3e3868656177',
-        'cancelledSubSites': 'empty',
-        'cna': 'NVhKHQx8pxABASABDuD094HA',
-        'cna': 'NVhKHQx8pxABASABDuD094HA',
-        'cnaui': '2216209135380',
-        'cookie1': 'AimSwy6Hu0cjkXBiNAEvUR5yUCjEb50QirZe9OQR8JM%3D',
-        'cookie17': 'UUpgQEvyiTEr4C708g%3D%3D',
-        'cookie2': '17baa001cddd95eeac0d14215754e2ba',
-        'csg': 'c5ccb5b5',
-        'dnk': 'tb627551502528',
-        'existShop': 'MTY5MDUzNTUyMQ%3D%3D',
-        'isg': 'BC4udLbkxtq_uDKu-9jGYYETf4TwL_Ipj4a_J1j3mTHsO86VwL6yOUI587_X4-pB',
-        'l': 'fBIQOzNINiq0KI6SBOfZFurza779IIRAguPzaNbMi9fP911p5XodW1O06889CnMNFssBR38PiVPBBeYBqIv4n5U62j-la_HmnmOk-Wf..',
-        'lgc': 'tb627551502528',
-        'sca': '2ce1ff46',
-        'sg': '807',
-        'sgcookie': 'E1004mNHjdedFCalsA3%2BDwxBbDVzpPHNcfgCxQwpMn8WChT8qXmCxiXv2GtRWHqACR5GrqBtYgklE3nsJQ6iHc00COBH86rxO%2FnNB1FZN0UAlGA%3D',
-        'skt': '5f59a84349d9041e',
-        't': '6b6122a7cb9e97ce82d19b64b5cfa46b',
-        'tbsa': '106e86f4144675054773332d_1690536928_9',
-        'tfstk': 'd-N9HuZeMMjGzUMYGVBhgivTTP_hK5UNjlzWimmMhkELlDAc7fXqMonL0cDi1cAxMrE4moUV7qibcon0I9fu7PlqGgcAZ_4aQqlfq1ChKNaZgjsk-I6lwPrygXCFUn1fYdpww7Fx5t_FmoxTl5gtBmpivIdfoVHtVPidVg6a47VJxp-o2qv1Jwp23AgFr-S5t',
-        'tracknick': 'tb627551502528',
-        'uc1': 'cookie21=Vq8l%2BKCLiYYu&cookie14=Uoe9bfibByxgsA%3D%3D&cookie15=U%2BGCWk%2F75gdr5Q%3D%3D&existShop=false&pas=0&cookie16=WqG3DMC9UpAPBHGz5QBErFxlCA%3D%3D',
-        'uc3': 'nk2=F5RDLjqWCLCCNe6Q0ac%3D&vt3=F8dCsGCg2j4K6APJSMg%3D&lg2=UIHiLt3xD8xYTw%3D%3D&id2=UUpgQEvyiTEr4C708g%3D%3D',
-        'uc4': 'id4=0%40U2gqz6QY%2B2LU45CVgCnTHhyjgZBJlJ9d&nk4=0%40FY4I7WSY2SzxeSCD9wJSplBYHJwWmW5zVQ%3D%3D',
-        'x5sec': '7b22617365727665723b32223a226539313338386538643739643266303964613031653838663861323366623766434f4b4d6a71594745506e57343658446c59476b65786f504d6a49784e6a49774f54457a4e544d344d4473324d4f79586a4e4d4451414d3d227d',
-        'xlly_s': '1',
-    }
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-    }
-    url = linkDetail
-    response = requests.get(url, headers=headers, cookies=cookie_parameters)
-    if response.status_code == 200:
-        data = response.json()
-        print("Data: " + data)
-        listPriceData= data['data']['originalPrice']
-        print("List Original data " + str(listPriceData))
-        listPrice = {}
-        for key, value in listPriceData.items():
-            listPrice[key.strip(';')] = value['price']
-        del listPrice['def']
-        listPromotionData = data['data']['promotion']['promoData']
-        stockProduct = data['data']['dynStock']
-        print("Stock Product: " + str(stockProduct))
-        listPromotion = {}
-        print("List price promotion " + str(listPromotionData))
-        for key, value in listPromotionData.items():
-            listPromotion[key.strip(';')] = value[0]['price']
-        print("List promotion " + str(listPromotion))
-        del listPromotion['def']
-        count = 0
-        product_list = []
+    print(response.json())
+
+    return response.json()
