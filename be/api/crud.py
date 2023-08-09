@@ -89,7 +89,8 @@ async def crawl_taobao(keyWord: str):
                         sys.stdout.flush()
 
                         name = translator.translate(item['raw_title'], src=constants.CHINESE, dest=constants.VIETNAMESE)
-                        shopName = translator.translate(item['shopName'], src=constants.CHINESE, dest=constants.VIETNAMESE).text
+                        shopName = translator.translate(item['shopName'], src=constants.CHINESE,
+                                                        dest=constants.VIETNAMESE).text
                         link = 'https:' + item['detail_url']
                         if 'click.simba.taobao' in link:
                             print(f"Ignoring item '{name}' as it contains 'click.taobao' link.")
@@ -309,8 +310,8 @@ def translate_text(text, target_language):
     translated_text = translator.translate(str(text), src=constants.CHINESE, dest=target_language).text
     return translated_text
 
-def patternForDetailV2():
 
+def patternForDetailV2():
     global detail_link_value
     html = '''<!DOCTYPE html>
 
@@ -1304,7 +1305,8 @@ body #accscreen {
     soup = BeautifulSoup(html, 'html.parser')
 
     # Find the <h3> tag with class 'tb-main-title' and get the value of data-title attribute
-    title = Translator().translate(soup.find('h3', class_='tb-main-title')['data-title'], src=constants.CHINESE, dest=constants.VIETNAMESE).text
+    title = Translator().translate(soup.find('h3', class_='tb-main-title')['data-title'], src=constants.CHINESE,
+                                   dest=constants.VIETNAMESE).text
 
     script_tags = soup.find_all("script")
     for script_tag in script_tags:
@@ -1319,7 +1321,8 @@ body #accscreen {
 
     return product
 
-def detailValueV2(linkDetail: str, title : str):
+
+def detailValueV2(linkDetail: str, title: str):
     if linkDetail is None or linkDetail == "":
         return "Empty link"
     translator = Translator()
@@ -1346,91 +1349,91 @@ def detailValueV2(linkDetail: str, title : str):
     #     return "Failed"
     # data = response.json()
     data = {
-         'code': 200,
-         'data': {'category_id': 217309,
-                  'comment_count': None,
-                  'currency': 'CNY',
-                  'delivery_info': {'area_from': ['上海市'],
-                                    'area_id': '',
-                                    'postage': '0'},
-                  'extra': 'False',
-                  'item_id': 726085758711,
-                  'main_imgs': [
-                      'https://gd4.alicdn.com/imgextra/i4/2215542721611/O1CN01S1Y1fY1Nlsukv6PFc_!!2215542721611.jpg',
-                      'https://gd3.alicdn.com/imgextra/i3/2215542721611/O1CN01GSYG6i1NlsupoYJOe_!!2215542721611.jpg',
-                      'https://gd3.alicdn.com/imgextra/i3/2215542721611/O1CN01zlOh721NlsuitvfgA_!!2215542721611.jpg',
-                      'https://gd2.alicdn.com/imgextra/i2/2215542721611/O1CN01L9tICh1NlsupoqAO3_!!2215542721611.jpg',
-                      'https://gd2.alicdn.com/imgextra/i2/2215542721611/O1CN019MUetm1NlsuoGFRGm_!!2215542721611.jpg'],
-                  'price_info': {'origin_price': '300.0', 'price': '300.0'},
-                  'product_props': [{'狗狗品种': '比熊'},
-                                    {'动物性别': '公 母'},
-                                    {'毛长': '中毛(如雪纳瑞/萨摩耶等)'},
-                                    {'颜色分类': '白色'},
-                                    {'狗狗种类': '家庭犬'},
-                                    {'血统信息': '有血统证书'},
-                                    {'免疫驱虫': '已做完'},
-                                    {'宠物体型': '玩具犬(成年体重<4kg，肩高<25cm)'},
-                                    {'级别': 'S参赛级'},
-                                    {'宠物年龄': '幼年犬(45日龄-12月龄)'},
-                                    {'卖家资质分类': '宠物店'}],
-                  'product_url': 'https://item.taobao.com/item.htm?id=726085758711',
-                  'root_category_id': None,
-                  'shop_info': {'followers': None,
-                                'good_rate_percentage': None,
-                                'is_tmall': False,
-                                'seller_id': 2215542721611,
-                                'shop_id': 498428785,
-                                'shop_logo': '',
-                                'shop_name': '萌新宠物馆',
-                                'shop_rate': [{'score': 4.99609,
-                                               'title': '宝贝描述',
-                                               'type': 'desc'},
-                                              {'score': 4.99609,
-                                               'title': '卖家服务',
-                                               'type': 'serv'},
-                                              {'score': 4.99609,
-                                               'title': '物流服务',
-                                               'type': 'post'}],
-                                'shop_start_time': None,
-                                'shop_url': 'https://shop498428785.taobao.com',
-                                'wangwang': 'https://amos.alicdn.com/getcid.aw?groupid=0&s=1&Im5SKL&charset=utf-8&uid=%E4%B8%8A%E6%B5%B7%E5%AE%A0%E7%89%A9%E5%9F%BA%E5%9C%B097&site=cntaobao&kJYNcf'},
-                  'sku_props': [{'pid': '21241',
-                                 'prop_name': '动物性别',
-                                 'values': [{'imageUrl': None,
-                                             'name': '母',
-                                             'vid': '9999473'},
-                                            {'imageUrl': None,
-                                             'name': '公',
-                                             'vid': '3873886'}]},
-                                {'pid': '1627207',
-                                 'prop_name': '颜色分类',
-                                 'values': [{'imageUrl': None,
-                                             'name': '白色',
-                                             'vid': '28320'}]},
-                                {'pid': '122276097',
-                                 'prop_name': '宠物年龄',
-                                 'values': [{'imageUrl': None,
-                                             'name': '幼年犬(45日龄-12月龄)',
-                                             'vid': '97077986'}]}],
-                  'skus': [{'origin_price': '1500.0',
-                            'props_ids': '21241:9999473;1627207:28320;122276097:97077986',
-                            'props_names': '动物性别:母;颜色分类:白色;宠物年龄:幼年犬(45日龄-12月龄)',
-                            'sale_price': '300.0',
-                            'skuid': '5209138662206',
-                            'stock': 200,
-                            'sub_price': None,
-                            'sub_price_type': 'discounted price'},
-                           {'origin_price': '1500.0',
-                            'props_ids': '21241:3873886;1627207:28320;122276097:97077986',
-                            'props_names': '动物性别:公;颜色分类:白色;宠物年龄:幼年犬(45日龄-12月龄)',
-                            'sale_price': '300.0',
-                            'skuid': '5209138662207',
-                            'stock': 200,
-                            'sub_price': None,
-                            'sub_price_type': 'discounted price'}],
-                  'title': '纯种比熊幼犬长不大不掉毛飞耳法国比熊犬小型犬茶杯犬活体宠物狗',
-                  'video_url': 'http://cloud.video.taobao.com/play/u/p/1/e/6/t/1/419427855174.mp4'},
-         'msg': 'success'
+        'code': 200,
+        'data': {'category_id': 217309,
+                 'comment_count': None,
+                 'currency': 'CNY',
+                 'delivery_info': {'area_from': ['上海市'],
+                                   'area_id': '',
+                                   'postage': '0'},
+                 'extra': 'False',
+                 'item_id': 726085758711,
+                 'main_imgs': [
+                     'https://gd4.alicdn.com/imgextra/i4/2215542721611/O1CN01S1Y1fY1Nlsukv6PFc_!!2215542721611.jpg',
+                     'https://gd3.alicdn.com/imgextra/i3/2215542721611/O1CN01GSYG6i1NlsupoYJOe_!!2215542721611.jpg',
+                     'https://gd3.alicdn.com/imgextra/i3/2215542721611/O1CN01zlOh721NlsuitvfgA_!!2215542721611.jpg',
+                     'https://gd2.alicdn.com/imgextra/i2/2215542721611/O1CN01L9tICh1NlsupoqAO3_!!2215542721611.jpg',
+                     'https://gd2.alicdn.com/imgextra/i2/2215542721611/O1CN019MUetm1NlsuoGFRGm_!!2215542721611.jpg'],
+                 'price_info': {'origin_price': '300.0', 'price': '300.0'},
+                 'product_props': [{'狗狗品种': '比熊'},
+                                   {'动物性别': '公 母'},
+                                   {'毛长': '中毛(如雪纳瑞/萨摩耶等)'},
+                                   {'颜色分类': '白色'},
+                                   {'狗狗种类': '家庭犬'},
+                                   {'血统信息': '有血统证书'},
+                                   {'免疫驱虫': '已做完'},
+                                   {'宠物体型': '玩具犬(成年体重<4kg，肩高<25cm)'},
+                                   {'级别': 'S参赛级'},
+                                   {'宠物年龄': '幼年犬(45日龄-12月龄)'},
+                                   {'卖家资质分类': '宠物店'}],
+                 'product_url': 'https://item.taobao.com/item.htm?id=726085758711',
+                 'root_category_id': None,
+                 'shop_info': {'followers': None,
+                               'good_rate_percentage': None,
+                               'is_tmall': False,
+                               'seller_id': 2215542721611,
+                               'shop_id': 498428785,
+                               'shop_logo': '',
+                               'shop_name': '萌新宠物馆',
+                               'shop_rate': [{'score': 4.99609,
+                                              'title': '宝贝描述',
+                                              'type': 'desc'},
+                                             {'score': 4.99609,
+                                              'title': '卖家服务',
+                                              'type': 'serv'},
+                                             {'score': 4.99609,
+                                              'title': '物流服务',
+                                              'type': 'post'}],
+                               'shop_start_time': None,
+                               'shop_url': 'https://shop498428785.taobao.com',
+                               'wangwang': 'https://amos.alicdn.com/getcid.aw?groupid=0&s=1&Im5SKL&charset=utf-8&uid=%E4%B8%8A%E6%B5%B7%E5%AE%A0%E7%89%A9%E5%9F%BA%E5%9C%B097&site=cntaobao&kJYNcf'},
+                 'sku_props': [{'pid': '21241',
+                                'prop_name': '动物性别',
+                                'values': [{'imageUrl': None,
+                                            'name': '母',
+                                            'vid': '9999473'},
+                                           {'imageUrl': None,
+                                            'name': '公',
+                                            'vid': '3873886'}]},
+                               {'pid': '1627207',
+                                'prop_name': '颜色分类',
+                                'values': [{'imageUrl': None,
+                                            'name': '白色',
+                                            'vid': '28320'}]},
+                               {'pid': '122276097',
+                                'prop_name': '宠物年龄',
+                                'values': [{'imageUrl': None,
+                                            'name': '幼年犬(45日龄-12月龄)',
+                                            'vid': '97077986'}]}],
+                 'skus': [{'origin_price': '1500.0',
+                           'props_ids': '21241:9999473;1627207:28320;122276097:97077986',
+                           'props_names': '动物性别:母;颜色分类:白色;宠物年龄:幼年犬(45日龄-12月龄)',
+                           'sale_price': '300.0',
+                           'skuid': '5209138662206',
+                           'stock': 200,
+                           'sub_price': None,
+                           'sub_price_type': 'discounted price'},
+                          {'origin_price': '1500.0',
+                           'props_ids': '21241:3873886;1627207:28320;122276097:97077986',
+                           'props_names': '动物性别:公;颜色分类:白色;宠物年龄:幼年犬(45日龄-12月龄)',
+                           'sale_price': '300.0',
+                           'skuid': '5209138662207',
+                           'stock': 200,
+                           'sub_price': None,
+                           'sub_price_type': 'discounted price'}],
+                 'title': '纯种比熊幼犬长不大不掉毛飞耳法国比熊犬小型犬茶杯犬活体宠物狗',
+                 'video_url': 'http://cloud.video.taobao.com/play/u/p/1/e/6/t/1/419427855174.mp4'},
+        'msg': 'success'
     }
 
     # Extract relevant data from the JSON response
@@ -1461,13 +1464,15 @@ def detailValueV2(linkDetail: str, title : str):
             translated_sku["props_names"] = ';'.join(translated_props)
         translated_skus.append(translated_sku)
 
-    product_dto = ProductDetailDto.ProductDto(product_id, title, product_url, main_imgs, translated_product_props, translated_sku_props, translated_skus)
+    product_dto = ProductDetailDto.ProductDto(product_id, title, product_url, main_imgs, translated_product_props,
+                                              translated_sku_props, translated_skus)
 
     save_detail_product(product_dto)
 
     return product_dto
 
-def save_detail_product(product : object):
+
+def save_detail_product(product: object):
     if product == "" or product is None:
         return "Object is empty"
 
@@ -1495,6 +1500,7 @@ def save_detail_product(product : object):
         print(f"An error occurred: {e}")
     finally:
         session.close()
+
 
 def get_product_detail(product_url):
     if product_url == "" or product_url is None:
@@ -1532,6 +1538,7 @@ def get_product_detail(product_url):
     finally:
         session.close()
 
+
 def get_link_by_id(id):
     session = database.SessionLocal()
 
@@ -1540,8 +1547,8 @@ def get_link_by_id(id):
 
     return session.query(models.SearchProduct).filter_by(product_id=id).first()
 
-def detailV2(id):
 
+def detailV2(id):
     global detail_link_value
 
     if id == "" or id is None:
