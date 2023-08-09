@@ -9,7 +9,6 @@ class ProductDto:
         self._product_props = product_props
         self._sku_props = sku_props
         self._skus = skus
-
         # Translate text using your translation API
 
     def translate_text(self, text, target_language):
