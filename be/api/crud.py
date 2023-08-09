@@ -1,11 +1,11 @@
 import asyncio
 import urllib.parse
 import json
-import aiohttp
+from typing import List
+
 from googletrans import Translator
 import urllib.parse
-from datetime import datetime
-import models
+
 import sys
 import requests
 import aiohttp
@@ -220,7 +220,7 @@ def save_list_data_to_db(list_data, error_callback=None):
                 continue
 
             if not check_if_record_exists(session, name):
-                product = models.SearchProduct(product_id=item['productId'],
+                product = models.SearchProduct(id=item['id'],
                                                name=name,
                                                price=item['price'],
                                                link=link,
@@ -238,21 +238,43 @@ def save_list_data_to_db(list_data, error_callback=None):
         session.close()
 
 
-def get_data_from_db(page_number=1, items_per_page=10):
-    session = database.SessionLocal()
+# def get_data_from_db(session: Session, page_number: int = 1, items_per_page: int = 10) -> List[models.SearchProduct]:
+#     try:
+#         # Calculate the offset based on the page number and items per page
+#         offset = (page_number - 1) * items_per_page
+#
+#         # Query the database to get a specific page of data
+#         data = session.query(models.SearchProduct).limit(items_per_page).offset(offset).all()
+#
+#         return data
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         return []
+
+
+def get_detail_from_db(session: Session, id: int):
     try:
-        # Calculate the offset based on the page number and items per page
-        offset = (page_number - 1) * items_per_page
+        query = session.query(models.SearchProduct).filter_by(id=id).first()
 
-        # Query the database to get a specific page of data
-        data = session.query(models.SearchProduct).limit(items_per_page).offset(offset).all()
+        if query:
+            detail = {
+                "id": query.id,
+                "name": query.name,
+                "price": query.price,
+                "link": query.link,
+                "image": query.image
+            }
+            return detail
+        else:
+            return None
 
-        return data
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"An error occurred while fetching data from the database: {e}")
         return None
-    finally:
-        session.close()
+
+
+
+
 def detail(id):
     url = "http://api.tmapi.top/taobao/item_detail"
 

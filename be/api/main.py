@@ -1,6 +1,6 @@
 from fastapi import Depends, FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
-
+from starlette.responses import JSONResponse
 import crud
 import models
 import config
@@ -70,9 +70,17 @@ async def search_taobao(keyWord: str):
 def check_token_expire(check_token: schemas.CheckToken):
     return check_token_expired(check_token.token)
 
+# @app.get("/list")
+# async def get_list(page_number: int = 1, items_per_page: int = 10):
+#     return crud.get_data_from_db(page_number, items_per_page)
+
 @app.get("/list")
 async def get_list(page_number: int = 1, items_per_page: int = 10):
-    return crud.get_data_from_db(page_number, items_per_page)
+    session = SessionLocal()
+    data = crud.get_detail_from_db(session, page_number)
+    session.close()
+    return JSONResponse(content=data)
+
 
 @app.get("/detail")
 def get_detail(id):
@@ -81,9 +89,6 @@ def get_detail(id):
     return crud.detail(id)
 
 
-# @app.get("/get-data")
-# async def get_data(page_number: int = 1, items_per_page: int = 10, db: Session = Depends(get_db)):
-#     data = crud.get_data_from_db(page_number, items_per_page, db)
-#     return data
+
 
 

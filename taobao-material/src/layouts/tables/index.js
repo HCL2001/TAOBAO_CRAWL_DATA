@@ -44,7 +44,9 @@ function Search() {
   const [form, setForm] = useState({});
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -56,11 +58,18 @@ function Search() {
       handleSubmit();
     }
   };
+
   const handleSubmit = async (e) => {
-    setLoading(true);
+    if (isSubmitting) {
+      return; // Nếu đang đợi submit thì không thực hiện lại
+    }
+
+    setIsSubmitting(true); // Bắt đầu quá trình submit
+    setLoading(true); // Bắt đầu hiển thị trạng thái loading
+
     if (form.search) {
       try {
-        const response = await axios.get(API_BASE_URL + "/search/" + form.search, {
+        const response = await axios.get(API_BASE_URL + "/taobao/" + form.search, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -92,8 +101,13 @@ function Search() {
         hideProgressBar: true,
       });
     }
-    setLoading(false);
+
     setIsButtonDisabled(true);
+    setIsSubmitting(false);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   };
 
   const [open, setOpen] = useState(false);
@@ -162,10 +176,9 @@ function Search() {
       width: 400,
       renderCell: (params) => {
         const { id, name } = params.row;
-        // Điều hướng tới trang chi tiết khi click vào cột "Name"
         return (
           <RouterLink
-            to={`/detail/${id}`} // Sử dụng to={`/detail/${id}`} để định nghĩa đường dẫn
+            to={`/detail/${id}`}
             style={{
               color: "white",
               textDecoration: "none",

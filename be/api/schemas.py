@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 class SearchProduct(BaseModel):
-    id: int
+    product_id: int
     name: str
     price: str
     link: str
