@@ -1534,18 +1534,24 @@ def get_product_detail(product_url):
 
         return product_data
     except Exception as e:
+        session.rollback()
         print(f"An error occurred: {e}")
     finally:
         session.close()
 
 
-def get_link_by_id(id):
+def get_product_by_id(id):
     session = database.SessionLocal()
 
     if session == "" or session is None:
         return "Session is empty"
 
-    return session.query(models.SearchProduct).filter_by(product_id=id).first()
+    id = session.query(models.SearchProduct).filter_by(product_id=id).first()
+
+    if id == "" or id is None:
+        return ""
+
+    return id
 
 
 def detailV2(id):
@@ -1554,7 +1560,10 @@ def detailV2(id):
     if id == "" or id is None:
         return "Id is empty"
 
-    link = get_link_by_id(id).link
+    product = get_product_by_id(id)
+
+    if product == "" or product is None:
+        return "Product is not existed"
 
     # Parse the HTML using BeautifulSoup
     # soup = BeautifulSoup(html, 'html.parser')
@@ -1575,3 +1584,33 @@ def detailV2(id):
     # product = detailValueV2(detail_link_value, title)
 
     return "Waiting"
+
+def deleteById(id):
+
+    if id == "" or id is None:
+        return "id is empty"
+
+    session = database.SessionLocal()
+
+    if session == "" or session is None:
+        return "Session is empty"
+
+    try:
+
+        record =session.query(models.SearchProduct).filter_by(product_id=id).first()
+
+        print(record)
+
+        if record == "" or record is None:
+            return "Product is not existed"
+
+        session.delete(record)
+        session.commit()
+
+        return "Record has been deleted"
+
+    except Exception as e:
+        session.rollback()
+        print(f"An error occurred: {e}")
+    finally:
+        session.close()

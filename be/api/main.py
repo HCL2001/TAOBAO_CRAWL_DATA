@@ -84,10 +84,12 @@ def pattern_Detail():
 
 @app.get("/test_get_detail")
 def test_get_detail(product_url):
-    if(product_url == "" or product_url is None):
-        return "Url is empty"
     return crud.get_product_detail(product_url)
 
 @app.get("/detailV2")
 def get_detailV2(id):
     return crud.detailV2(id)
+
+@app.delete("/")
+def deleteById(id):
+    return crud.deleteById(id)
