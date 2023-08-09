@@ -14,8 +14,11 @@ from sqlalchemy.orm import Session
 import database
 import models
 import constants
-
 import requests
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 
 async def register():
@@ -256,16 +259,42 @@ def get_data_from_db(page_number=1, items_per_page=10):
         return None
     finally:
         session.close()
+
+def handle_slider_captcha(id):
+    driver = webdriver.Chrome()
+    print(f'{id}')
+    driver.get(f"https://item.taobao.com/item.htm?id={id}")
+    # captcha_button = driver.find_element_by_xpath("//span[@class='nc_iconfont btn_slide']")
+    captcha_button = driver.find_element(By.ID, 'nc_1_n1z')
+    print(f'success => {captcha_button}')
+    # if captcha_button:
+    #     # Thực hiện hành động kéo button
+    #     action = ActionChains(driver)
+    #     action.click_and_hold(captcha_button).move_by_offset(200, 0).release().perform()
+    #
+    # # Chờ một thời gian ngắn để kiểm tra kết quả
+    # driver.implicitly_wait(5)
+    # driver.quit()
+
 def detail(id):
-    url = "http://api.tmapi.top/taobao/item_detail"
+    handle_slider_captcha(id)
+    try:
+        url = "http://api.tmapi.top/taobao/item_detail"
 
-    querystring = {"apiToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6Imxvbmdob2FuZzA5MTEiLCJDb21pZCI6bnVsbCwiUm9sZWlkIjpudWxsLCJpc3MiOiJ0bWFwaSIsInN1YiI6Imxvbmdob2FuZzA5MTEiLCJhdWQiOlsiIl19.fGIqSCT0WdxU7I_v0u-_t7fv6YCI9z75C5mGV9dXF_s", "item_id": id}
+        # handle_slider_captcha(id)
 
-    response = requests.get(url, params=querystring)
+        querystring = {
+            "apiToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6Imxvbmdob2FuZzA5MTEiLCJDb21pZCI6bnVsbCwiUm9sZWlkIjpudWxsLCJpc3MiOiJ0bWFwaSIsInN1YiI6Imxvbmdob2FuZzA5MTEiLCJhdWQiOlsiIl19.fGIqSCT0WdxU7I_v0u-_t7fv6YCI9z75C5mGV9dXF_s",
+            "item_id": id}
 
-    if response.status_code != 200:
-        return "False when getting detail"
+        response = requests.get(url, params=querystring)
 
-    print(response.json())
+        if response.status_code != 200:
+            return "False when getting detail"
 
-    return response.json()
+        print(response.json())
+
+        return response.json()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
