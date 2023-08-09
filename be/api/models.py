@@ -40,8 +40,10 @@ class Detail(Base):
     __tablename__ = "detail"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    n_id = Column(Integer)
     name = Column(String(1020))
-    price = Column(String(20))
-    link = Column(Text)
-    promotion = Column(String(50))
-    product_name = Column(String(1020))
+    product_url = Column(String(5000))
+    main_imgs = Column(Text)
+    product_props = Column(Text)
+    sku_props = Column(Text)
+    skus = Column(Text)

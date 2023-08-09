@@ -76,15 +76,18 @@ async def get_list(page_number: int = 1, items_per_page: int = 10):
 
 @app.get("/detail")
 def get_detail(id):
-    if(id == "" or id == None):
-        return "id is null"
-    return crud.detail()
-
-@app.get("/demo")
-def test_function():
-    return crud.demo_function()
+    return crud.detailV2(id)
 
 @app.get("/patternDetail")
 def pattern_Detail():
-    return crud.patternForDetail()
+    return crud.patternForDetailV2()
 
+@app.get("/test_get_detail")
+def test_get_detail(product_url):
+    if(product_url == "" or product_url is None):
+        return "Url is empty"
+    return crud.get_product_detail(product_url)
+
+@app.get("/detailV2")
+def get_detailV2(id):
+    return crud.detailV2(id)
