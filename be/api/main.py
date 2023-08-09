@@ -90,6 +90,6 @@ def test_get_detail(product_url):
 def get_detailV2(id):
     return crud.detailV2(id)
 
-@app.delete("/")
+@app.delete("/", dependencies=[Depends(validate_token)])
 def deleteById(id):
     return crud.deleteById(id)

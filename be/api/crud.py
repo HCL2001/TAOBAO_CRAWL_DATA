@@ -1597,7 +1597,7 @@ def deleteById(id):
 
     try:
 
-        record =session.query(models.SearchProduct).filter_by(product_id=id).first()
+        record = session.query(models.SearchProduct).filter_by(product_id=id).first()
 
         print(record)
 
