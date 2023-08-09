@@ -11,6 +11,7 @@ class SearchProduct(Base):
     product_id = Column(String(255))
     name = Column(String(1020))
     price = Column(String(50))
+    shopName = Column(String(255))
     link = Column(Text)  # Sử dụng cột TEXT cho các URL dài
     image = Column(String(1020))
 

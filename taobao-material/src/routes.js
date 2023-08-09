@@ -49,12 +49,12 @@ const routes = [
     // ...các tuyến khác
   },
   {
-    // Thêm tuyến cho trang chi tiết
     type: "collapse",
-    name: "Detail Page", // Tên hiển thị trên menu
-    key: "detail-page", // Khóa duy nhất cho tuyến
-    route: "/detail/:id", // Định dạng URL cho trang chi tiết, :id sẽ được thay bằng ID thực tế
-    component: <DetailPage />, // Sử dụng component DetailPage đã import
+    name: "Detail Page",
+    key: "detail-page",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/detail/:id",
+    component: <DetailPage />,
   },
   {
     // type: "collapse",

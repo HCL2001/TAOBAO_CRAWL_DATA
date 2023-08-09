@@ -9,6 +9,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
+import { Link as RouterLink } from "react-router-dom";
 
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
@@ -25,6 +26,7 @@ import {
   Typography,
   CircularProgress,
   Link,
+  Pagination,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "examples/Header/Header";
@@ -45,6 +47,14 @@ function ListData() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [page, setPage] = useState(1); // Current page
+  const pageSize = 10; // Number of items per page
+
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+
+  // ... Your existing functions
 
   async function fetchListData(pageNumber, itemsPerPage) {
     const token = localStorage.getItem("token");
@@ -104,6 +114,22 @@ function ListData() {
       field: "name",
       headerName: "Name",
       width: 400,
+      renderCell: (params) => {
+        const { id, name } = params.row;
+        return (
+          <RouterLink
+            to={`/detail/${id}`}
+            style={{
+              color: "white",
+              textDecoration: "none",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {name}
+          </RouterLink>
+        );
+      },
     },
     {
       field: "price",
@@ -149,14 +175,48 @@ function ListData() {
       <DashboardNavbar />
       <Box pt={6} pb={3}>
         <ToastContainer />
-        <Header title="TAOBAO" subtitle="Search of Product" />
+        <Header title="TAOBAO" subtitle="List Data" />
         <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
           mt="40px"
-          mx="auto"
-          maxWidth="800px"
+          height="75vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: theme.palette.info.light,
+              color: "white!important",
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: theme.palette.background.alt,
+              color: theme.palette.secondary[100],
+              borderTop: "none",
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${theme.palette.secondary[200]} !important`,
+            },
+            "& .image": {
+              borderRadius: "50%",
+            },
+            "& .MuiDataGrid-checkboxInput.Mui-checked": {
+              color: "white",
+            },
+            "& .MuiDataGrid-root--densityStandard": {
+              maxWidth: "1189.2px",
+              maxHeight: "559.2px",
+            },
+            "& .MuiGrid-item": {
+              maxWidth: "1189.2px",
+            },
+          }}
         >
           <Grid item xs={10} sm={8} md={6} lg={4}>
             {/* ... (Search bar and button) */}
@@ -167,7 +227,11 @@ function ListData() {
             rows={data}
             checkboxSelection
             disableRowSelectionOnClick
-            pageSize={10}
+            initialState={{
+              ...data.initialState,
+              pagination: { paginationModel: { pageSize: 5 } },
+            }}
+            pageSizeOptions={[5, 10, 25]}
             onRowSelectionModelChange={(ids) => {
               setSelectedRowIds(ids);
               const selectedIDs = new Set(ids);
@@ -180,9 +244,6 @@ function ListData() {
               setIsButtonDisabled(selectedLinks.length === 0);
             }}
             rowSelectionModel={selectedRowIds}
-            onPageChange={(params) => {
-              handlePageChange(params.page + 1);
-            }}
           />
         </Box>
       </Box>

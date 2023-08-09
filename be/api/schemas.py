@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 
 class SearchProduct(BaseModel):
-    product_id: int
+    id: int
     name: str
     price: str
+    shopName: str
     link: str
 
     class Config:
