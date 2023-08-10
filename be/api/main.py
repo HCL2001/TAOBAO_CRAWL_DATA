@@ -1,6 +1,5 @@
 from fastapi import Depends, FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import JSONResponse
 import crud
 import models
 import config
@@ -84,11 +83,6 @@ def get_detail(id):
 @app.get("/demo")
 def test_function():
     return crud.demo_function()
-
-
-
-
-
 
 @app.get("/patternDetail")
 def pattern_Detail():

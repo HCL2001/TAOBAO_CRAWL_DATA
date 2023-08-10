@@ -110,12 +110,14 @@ export default function Login() {
         mb={1}
         textAlign="center"
       >
-        <Container component="main" maxWidth="sm">
+        <Container component="main" maxWidth="mt">
           {" "}
           {/* Đổi maxWidth để tăng kích thước của form */}
           <CssBaseline />
           <Box
             sx={{
+              width: 300,
+              alignItems: "center",
               marginTop: 8,
               display: "flex",
               flexDirection: "column",
@@ -167,20 +169,34 @@ export default function Login() {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  backgroundColor: "#1976D2",
+                  color: "#FFFFFF",
+                }}
+              >
                 {isLoading ? <CircularProgress value={50} size={20} /> : "Sign in"}
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
+
+              <Grid item xs={12}>
+                <Link href="#" variant="body2">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item xs={12}>
+                <Link href="#" variant="body2">
+                  {"Don't have an account?"}
+                </Link>
+              </Grid>
+              <Grid item xs={12}>
+                <Link href="#" variant="body2">
+                  {"Sign Up"}
+                </Link>
               </Grid>
             </Box>
           </Box>

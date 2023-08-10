@@ -59,23 +59,23 @@ function Search() {
     }
   };
 
-  const [page, setPage] = useState(1); // Current page
-  const pageSize = 10; // Number of items per page
+  // const [page, setPage] = useState(1);
+  // const pageSize = 10;
 
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
+  // const startIndex = (page - 1) * pageSize;
+  // const endIndex = startIndex + pageSize;
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
+  // const handlePageChange = (event, value) => {
+  //   setPage(value);
+  // };
 
   const handleSubmit = async (e) => {
     if (isSubmitting) {
-      return; // Nếu đang đợi submit thì không thực hiện lại
+      return;
     }
 
-    setIsSubmitting(true); // Bắt đầu quá trình submit
-    setLoading(true); // Bắt đầu hiển thị trạng thái loading
+    setIsSubmitting(true);
+    setLoading(true);
 
     if (!form.search || form.search.trim() === "") {
       toast.error("Bạn vui lòng nhập từ khóa vào ô search!", {
@@ -89,7 +89,7 @@ function Search() {
       return; // Dừng quá trình submit nếu ô search trống
     }
 
-    if (/[^\w\s]/.test(form.search)) {
+    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(form.search)) {
       toast.error("Vui lòng nhập lại với từ khóa hợp lệ!", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,

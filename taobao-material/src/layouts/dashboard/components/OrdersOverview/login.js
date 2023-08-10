@@ -97,7 +97,7 @@ export default function Login() {
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" style={{ color: "white" }}>
             Sign in
           </Typography>
           <Box component="form" onSubmit={(e) => handleLogin(e)} noValidate sx={{ mt: 1 }}>
@@ -135,7 +135,7 @@ export default function Login() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            <Button style={{ color: "white" }}>
               {isLoading ? <CircularProgress value={50} size={20} /> : "Sign in"}
             </Button>
             <Grid container>

@@ -2,8 +2,6 @@ import asyncio
 import time
 import urllib.parse
 import json
-from typing import List
-
 from googletrans import Translator
 import urllib.parse
 
@@ -277,8 +275,11 @@ async def crawl_taobao(keyWord: str):
             script_content = script_tag.string
             if script_content and "g_page_config" in script_content:
                 start_index = script_content.find("g_page_config =")
-                end_index = script_content.find("}};")
-                json_content = script_content[start_index + 15: end_index + 2]
+                if start_index != -1:  # Kiểm tra xem có tìm thấy "g_page_config ="
+                    start_index += len("g_page_config =")
+                    end_index = script_content.find("};", start_index)  # Tìm vị trí kết thúc của JSON
+                    if end_index != -1:
+                        json_content = script_content[start_index:end_index + 1]
                 try:
                     g_page_config_json = json.loads(json_content)
                     data = g_page_config_json['mods']['itemlist']['data']['auctions']
