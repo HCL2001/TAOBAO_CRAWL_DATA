@@ -1,21 +1,14 @@
 from fastapi import Depends, FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
-
 import crud
 import models
-import config
 import schemas
 from database import SessionLocal, engine
 from sqlalchemy.orm import Session
 
-import subprocess
 from datetime import datetime
-from typing import Optional
 import jwt
-# from croniter import croniter
-# from crontab import CronTab
 from security import verify_password, generate_token, validate_token, check_token_expired
-from googletrans import *
 
 
 models.Base.metadata.create_all(bind=engine)

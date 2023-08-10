@@ -35,6 +35,7 @@ import { API_BASE_URL } from "assets/api/api";
 import IconButton from "@mui/material/IconButton";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Pagination from "@mui/material/Pagination";
 
 function Search() {
   const authToken = JSON.parse(JSON.stringify(localStorage.getItem("token")));
@@ -45,6 +46,7 @@ function Search() {
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -56,44 +58,89 @@ function Search() {
       handleSubmit();
     }
   };
+
+  const [page, setPage] = useState(1); // Current page
+  const pageSize = 10; // Number of items per page
+
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
+
   const handleSubmit = async (e) => {
-    setLoading(true);
-    if (form.search) {
-      try {
-        const response = await axios.get(API_BASE_URL + "/search/" + form.search, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setData(response.data);
-        setSelectedRowIds([]);
-        console.log(response.data);
-        console.log("Yêu cầu đã được gửi thành công!");
-        toast.success("Yêu cầu đã được gửi thành công!", {
-          position: toast.POSITION.TOP_CENTER,
-          autoClose: 3000,
-          hideProgressBar: true,
-        });
-      } catch (error) {
-        if (error.message === "Request failed with status code 403") {
-          window.location.reload();
-        } else {
-          toast.error(error.code, {
-            position: toast.POSITION.TOP_CENTER,
-            autoClose: 3000,
-            hideProgressBar: true,
-          });
-        }
-      }
-    } else {
+    if (isSubmitting) {
+      return; // Nếu đang đợi submit thì không thực hiện lại
+    }
+
+    setIsSubmitting(true); // Bắt đầu quá trình submit
+    setLoading(true); // Bắt đầu hiển thị trạng thái loading
+
+    if (!form.search || form.search.trim() === "") {
       toast.error("Bạn vui lòng nhập từ khóa vào ô search!", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
         hideProgressBar: true,
       });
+      setIsButtonDisabled(false); // Cho phép người dùng submit lại sau khi hiện thông báo lỗi
+      setIsSubmitting(false);
+      setLoading(false);
+      return; // Dừng quá trình submit nếu ô search trống
     }
-    setLoading(false);
+
+    if (/[^\w\s]/.test(form.search)) {
+      toast.error("Vui lòng nhập lại với từ khóa hợp lệ!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+
+      // Xóa giá trị ô search nếu có ký tự đặc biệt
+      setForm({
+        ...form,
+        search: "", // Đặt lại giá trị ô search về rỗng
+      });
+
+      setIsButtonDisabled(false); // Cho phép người dùng submit lại sau khi hiện thông báo lỗi
+      setIsSubmitting(false);
+      setLoading(false);
+      return; // Dừng quá trình submit nếu có ký tự đặc biệt
+    }
+
+    try {
+      const response = await axios.get(API_BASE_URL + "/taobao/" + form.search, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      setData(response.data);
+      setSelectedRowIds([]);
+      console.log(response.data);
+      console.log("Yêu cầu đã được gửi thành công!");
+      toast.success("Yêu cầu đã được gửi thành công!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+    } catch (error) {
+      if (error.message === "Request failed with status code 403") {
+        window.location.reload();
+      } else {
+        toast.error(error.code, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+      }
+    }
+
     setIsButtonDisabled(true);
+    setIsSubmitting(false);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   };
 
   const [open, setOpen] = useState(false);
@@ -160,23 +207,6 @@ function Search() {
       field: "name",
       headerName: "Name",
       width: 400,
-      renderCell: (params) => {
-        const { id, name } = params.row;
-        // Điều hướng tới trang chi tiết khi click vào cột "Name"
-        return (
-          <RouterLink
-            to={`/detail/${id}`} // Sử dụng to={`/detail/${id}`} để định nghĩa đường dẫn
-            style={{
-              color: "white",
-              textDecoration: "none",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {name}
-          </RouterLink>
-        );
-      },
     },
     {
       field: "price",
@@ -297,7 +327,7 @@ function Search() {
               ...data.initialState,
               pagination: { paginationModel: { pageSize: 10 } },
             }}
-            pageSizeOptions={[10, 20, 30]}
+            pageSizeOptions={[10, 30, 50]}
             onRowSelectionModelChange={(ids) => {
               setSelectedRowIds(ids);
               const selectedIDs = new Set(ids);
