@@ -55,6 +55,10 @@ def login(request_data: schemas.LoginRequest, db: Session = Depends(get_db)):
         token = generate_token(request_data.username)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[SECURITY_ALGORITHM])
         expiration_time = datetime.fromtimestamp(payload["exp"])
+
+        # Cập nhật token vào cơ sở dữ liệu
+        crud.update_token(username=request_data.username, token=token, db=db)
+
         return {
             'token': token,
             'expiration_time': expiration_time

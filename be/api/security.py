@@ -37,7 +37,6 @@ def verify_password(username, password, db):
         db.close()
 
 
-
 def generate_token(username: Union[str, Any]) -> str:
     expire = datetime.utcnow() + timedelta(
         seconds=60 * 60 * 24 * 3  # Expired after 3 days

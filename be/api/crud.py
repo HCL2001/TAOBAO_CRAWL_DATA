@@ -19,6 +19,24 @@ import constants
 import requests
 import ProductDetailDto
 
+def update_token(username: str, token: str, db: Session):
+    account = db.query(models.Account).filter(models.Account.username == username).first()
+    if account:
+        account.token = token
+        db.commit()
+
+
+def check_username_exists(db: Session, username: str) -> bool:
+    return db.query(models.Account).filter(models.Account.username == username).first() is not None
+
+def get_account_by_username(db: Session, username: str):
+    try:
+        account = db.query(models.Account).filter(models.Account.username == username).first()
+        return account
+    except Exception as e:
+        return None
+    finally:
+        db.close()
 
 async def register():
     product_list = []
@@ -277,17 +295,7 @@ def get_data_from_db(page_number=1, items_per_page=10):
     finally:
         session.close()
 
-def check_username_exists(db: Session, username: str) -> bool:
-    return db.query(models.Account).filter(models.Account.username == username).first() is not None
 
-def get_account_by_username(db: Session, username: str):
-    try:
-        account = db.query(models.Account).filter(models.Account.username == username).first()
-        return account
-    except Exception as e:
-        return None
-    finally:
-        db.close()
 
 
 def detail():
