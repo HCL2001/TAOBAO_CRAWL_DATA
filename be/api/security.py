@@ -17,9 +17,12 @@ reusable_oauth2 = HTTPBearer(
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+def hashed_password(password: str):
+    hashed_password = pwd_context.hash(password)
+    return hashed_password
+
 
 def check_password_hash(password, account_pass):
-
     return pwd_context.verify(password, account_pass)
 
 def verify_password(username, password, db):

@@ -15,21 +15,29 @@ from sqlalchemy.orm import Session
 import database
 import models
 import constants
-
+import schemas
 import requests
 import ProductDetailDto
+import security
 
 def update_token(username: str, token: str, db: Session):
     account = db.query(models.Account).filter(models.Account.username == username).first()
-
     if account:
         account.token = token
         db.commit()
 
+def register_new_user(request_data: schemas.RegisterRequest, db: Session):
+    new_hashed_password = security.hashed_password(request_data.password)
+    new_user = models.Account(
+        username=request_data.username,
+        password=new_hashed_password,
+        token="")  # Chưa có token khi đăng ký
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
 def check_username_exists(db: Session, username: str) -> bool:
     return db.query(models.Account).filter(models.Account.username == username).first() is not None
-
-
 
 def get_account_by_username(db: Session, username: str):
     try:
