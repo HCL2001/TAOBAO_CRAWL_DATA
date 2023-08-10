@@ -65,15 +65,11 @@ function Search() {
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
 
-  // ... Your existing functions
-
   const handlePageChange = (event, value) => {
     setPage(value);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của form
-
     if (isSubmitting) {
       return; // Nếu đang đợi submit thì không thực hiện lại
     }

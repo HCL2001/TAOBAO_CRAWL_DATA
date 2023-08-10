@@ -85,13 +85,13 @@ def get_detail(id):
 def test_function():
     return crud.demo_function()
 
-<<<<<<< HEAD
 
 
 
-=======
+
+
 @app.get("/patternDetail")
 def pattern_Detail():
     return crud.patternForDetail()
->>>>>>> 961d260f4f023bac3bd76a3ed865f6013bb31ce4
+
 

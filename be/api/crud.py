@@ -353,8 +353,7 @@ def save_list_data_to_db(list_data, error_callback=None):
                                                price=item['price'],
                                                shopName=item['shopName'],
                                                link=link,
-                                               image=item['image'],
-                                               shop_name=item['shopName'])
+                                               image=item['image'])
                 session.add(product)
         session.commit()
         print("Data saved successfully.")

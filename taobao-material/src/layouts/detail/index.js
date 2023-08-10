@@ -44,8 +44,8 @@ const DetailPage = () => {
                     color="primary"
                     sx={{
                       marginRight: 1,
-                      backgroundColor: color.toLowerCase(), // Sử dụng màu sắc như background color
-                      color: "white", // Màu chữ trắng để tương phản với nền
+                      backgroundColor: color.toLowerCase(),
+                      color: "white",
                     }}
                   >
                     {color}
