@@ -26,9 +26,9 @@ def update_token(username: str, token: str, db: Session):
         account.token = token
         db.commit()
 
-
 def check_username_exists(db: Session, username: str) -> bool:
     return db.query(models.Account).filter(models.Account.username == username).first() is not None
+
 
 def get_account_by_username(db: Session, username: str):
     try:
