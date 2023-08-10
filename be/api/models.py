@@ -14,6 +14,7 @@ class SearchProduct(Base):
     shopName = Column(String(255))
     link = Column(Text)  # Sử dụng cột TEXT cho các URL dài
     image = Column(String(1020))
+    shop_name = Column(String(1020))
 
     # def __str__(self):
     #     return f"SearchProduct(id={self.id}, name={self.name}, price={self.price}, image={self.image})"
