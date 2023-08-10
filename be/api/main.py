@@ -71,7 +71,7 @@ async def get_list(page_number: int = 1, items_per_page: int = 10):
 def get_detail(id):
     return crud.detailV2(id)
 
-@app.get("/patternDetail")
+@app.get("/patternDetail", dependencies=[Depends(validate_token)])
 def pattern_Detail():
     return crud.patternForDetailV2()
 
@@ -86,3 +86,11 @@ def get_detailV2(id):
 @app.delete("/", dependencies=[Depends(validate_token)])
 def deleteById(id):
     return crud.deleteById(id)
+
+@app.post("/cart", )
+def add_to_cart(request_data: schemas.CartItem):
+    return crud.add_to_cart(request_data)
+
+@app.get("/cart", dependencies=[Depends(validate_token)])
+def get_cart(username: str):
+    return crud.get_cart_with_items(username)

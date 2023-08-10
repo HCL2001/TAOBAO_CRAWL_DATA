@@ -33,3 +33,9 @@ class Setting(BaseModel):
     quantity: int
     unit: str
     status: str
+
+class CartItem(BaseModel):
+    n_id: int
+    username: str
+    price: float
+    quantity: int

@@ -14,7 +14,7 @@ import constants
 
 import requests
 import ProductDetailDto
-
+from decimal import Decimal
 async def register():
     product_list = []
     headers = {
@@ -265,6 +265,7 @@ async def crawl_taobao(keyWord: str):
         async with session.get(url, headers=headers, cookies=cookie_parameters) as resp:
             content = await resp.text()
             soup = BeautifulSoup(content, "html.parser")
+            print(soup)
             script_tags = soup.find_all("script")
         for script_tag in script_tags:
             script_content = script_tag.string
@@ -1759,13 +1760,61 @@ def detailV2(id):
     if product == "" or product is None:
         return "Product is not existed"
 
-    # Parse the HTML using BeautifulSoup
-    # soup = BeautifulSoup(html, 'html.parser')
+    cookie_parameters = {
+        'JSESSIONID': 'A5EA6A1FC6ED9491E8BFE168344D9E7C',
+        '_cc_': 'VFC%2FuZ9ajQ%3D%3D',
+        '_nk_': 'tb627551502528',
+        '_samesite_flag_': 'true',
+        '_tb_token_': 'ee73d9beb6709',
+        'atpsida': 'c1ba942fb3fe1cbf03e466a6_1690536928_9',
+        'aui': '2216209135380',
+        '_tb_token_': '3e3868656177',
+        'cancelledSubSites': 'empty',
+        'cna': 'NVhKHQx8pxABASABDuD094HA',
+        'cna': 'NVhKHQx8pxABASABDuD094HA',
+        'cnaui': '2216209135380',
+        'cookie1': 'AimSwy6Hu0cjkXBiNAEvUR5yUCjEb50QirZe9OQR8JM%3D',
+        'cookie17': 'UUpgQEvyiTEr4C708g%3D%3D',
+        'cookie2': '17baa001cddd95eeac0d14215754e2ba',
+        'csg': 'c5ccb5b5',
+        'dnk': 'tb627551502528',
+        'existShop': 'MTY5MDUzNTUyMQ%3D%3D',
+        'isg': 'BC4udLbkxtq_uDKu-9jGYYETf4TwL_Ipj4a_J1j3mTHsO86VwL6yOUI587_X4-pB',
+        'l': 'fBIQOzNINiq0KI6SBOfZFurza779IIRAguPzaNbMi9fP911p5XodW1O06889CnMNFssBR38PiVPBBeYBqIv4n5U62j-la_HmnmOk-Wf..',
+        'lgc': 'tb627551502528',
+        'sca': '2ce1ff46',
+        'sg': '807',
+        'sgcookie': 'E1004mNHjdedFCalsA3%2BDwxBbDVzpPHNcfgCxQwpMn8WChT8qXmCxiXv2GtRWHqACR5GrqBtYgklE3nsJQ6iHc00COBH86rxO%2FnNB1FZN0UAlGA%3D',
+        'skt': '5f59a84349d9041e',
+        't': '6b6122a7cb9e97ce82d19b64b5cfa46b',
+        'tbsa': '106e86f4144675054773332d_1690536928_9',
+        'tfstk': 'd-N9HuZeMMjGzUMYGVBhgivTTP_hK5UNjlzWimmMhkELlDAc7fXqMonL0cDi1cAxMrE4moUV7qibcon0I9fu7PlqGgcAZ_4aQqlfq1ChKNaZgjsk-I6lwPrygXCFUn1fYdpww7Fx5t_FmoxTl5gtBmpivIdfoVHtVPidVg6a47VJxp-o2qv1Jwp23AgFr-S5t',
+        'tracknick': 'tb627551502528',
+        'uc1': 'cookie21=Vq8l%2BKCLiYYu&cookie14=Uoe9bfibByxgsA%3D%3D&cookie15=U%2BGCWk%2F75gdr5Q%3D%3D&existShop=false&pas=0&cookie16=WqG3DMC9UpAPBHGz5QBErFxlCA%3D%3D',
+        'uc3': 'nk2=F5RDLjqWCLCCNe6Q0ac%3D&vt3=F8dCsGCg2j4K6APJSMg%3D&lg2=UIHiLt3xD8xYTw%3D%3D&id2=UUpgQEvyiTEr4C708g%3D%3D',
+        'uc4': 'id4=0%40U2gqz6QY%2B2LU45CVgCnTHhyjgZBJlJ9d&nk4=0%40FY4I7WSY2SzxeSCD9wJSplBYHJwWmW5zVQ%3D%3D',
+        'x5sec': '7b22617365727665723b32223a226539313338386538643739643266303964613031653838663861323366623766434f4b4d6a71594745506e57343658446c59476b65786f504d6a49784e6a49774f54457a4e544d344d4473324d4f79586a4e4d4451414d3d227d',
+        'xlly_s': '1',
+    }
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; Trident/7.0; AS; rv:11.0) like Gecko'
+    }
+    url = "https://detail.tmall.com/item.htm?abbucket=12&id=721850641742&ns=1&skuId=5067873984690"
 
-    # Find the <h3> tag with class 'tb-main-title' and get the value of data-title attribute
+    response = requests.get(url, headers=headers, cookies=cookie_parameters)
+    if response.status_code != 200:
+        return "Fail when getting value"
+    html = response.text
+
+    print(html)
+
+    # # Parse the HTML using BeautifulSoup
+    # soup = BeautifulSoup(html, 'html.parser')
+    #
+    # # Find the <h3> tag with class 'tb-main-title' and get the value of data-title attribute
     # title = Translator().translate(soup.find('h3', class_='tb-main-title')['data-title'], src=constants.CHINESE,
     #                                dest=constants.VIETNAMESE).text
-
+    #
     # script_tags = soup.find_all("script")
     # for script_tag in script_tags:
     #     script_content = script_tag.string
@@ -1777,7 +1826,7 @@ def detailV2(id):
     #
     # product = detailValueV2(detail_link_value, title)
 
-    return "Waiting"
+    return product
 
 def deleteById(id):
 
@@ -1808,3 +1857,119 @@ def deleteById(id):
         print(f"An error occurred: {e}")
     finally:
         session.close()
+
+def add_to_cart(data):
+
+    if data == "" or data is None:
+        return "Data is empty"
+
+    if data.price < 0 or data.price is None:
+        return "Price is invalid"
+
+    if data.quantity < 0 or data.quantity is None:
+        return "Quantity is invalid"
+
+    session = database.SessionLocal()
+
+    try:
+        if session == "" or session is None:
+            return "Session is empty"
+
+        # Get the product detail
+        detail = session.query(models.Detail).filter_by(n_id=data.n_id).first()
+
+        if detail == "" or detail is None:
+            return "Detail product is empty"
+
+            # Check if the user already has a cart
+        existing_cart = session.query(models.Cart).filter_by(username=data.username).first()
+
+        if not existing_cart:
+            # Create a new cart for the user
+            new_cart = models.Cart(username=data.username)
+            session.add(new_cart)
+            session.commit()
+            existing_cart = new_cart
+
+        existing_cart_item = session.query(models.CartItem).filter_by(cart=existing_cart, n_id=data.n_id).first()
+
+        if existing_cart_item:
+            # Update the existing cart item's n_id, price, quantity, and total_price
+            existing_cart_item.n_id = detail.n_id
+            existing_cart_item.price = data.price
+            existing_cart_item.quantity = data.quantity
+            existing_cart_item.total_price = Decimal(data.price) * Decimal(data.quantity)
+        else:
+            cart_item = models.CartItem(
+                cart=existing_cart,
+                name=detail.name,
+                n_id=detail.n_id,
+                price=Decimal(data.price),
+                quantity=Decimal(data.quantity),
+                total_price=Decimal(data.price) * Decimal(data.quantity),
+            )
+            session.add(cart_item)
+
+        # Update the total_price in the Cart table
+        existing_cart.total_price = sum(cart_item.total_price for cart_item in existing_cart.cart_items)
+
+        session.commit()
+
+    except Exception as e:
+        session.rollback()
+        print("Error: " + str(e))
+        return "An error occurred while adding to cart"
+    finally:
+        session.close()
+
+    return "Item added to cart successfully"
+
+def get_cart_with_items(username):
+
+    if username == "" or username is None:
+        return "Username is empty"
+
+    session = database.SessionLocal()
+
+    try:
+
+        if session == "" or session is None:
+            return "Session is empty"
+
+        cart = session.query(models.Cart).filter_by(username=username).first()
+
+        if cart == "" or cart is None:
+            return "Cart is not existed"
+
+        # Load the associated cart items
+        cart_items = cart.cart_items
+
+        if cart_items == "" or cart_items is None:
+            return "Cart is empty"
+
+        # Serialize the cart and cart items
+        cart_data = {
+            "cart_id": cart.id,
+            "username": cart.username,
+            "total_price": str(cart.total_price),  # Convert Decimal to string for JSON serialization
+            "cart_items": [
+                {
+                    "id": item.id,
+                    "name": item.name,
+                    "n_id": item.n_id,
+                    "price": str(item.price),
+                    "quantity": str(item.quantity),
+                    "total_price": str(item.total_price)
+                }
+                for item in cart_items
+            ]
+        }
+
+        return cart_data
+
+    except Exception as e:
+        print("Error: " + str(e))
+    finally:
+        session.close()
+
+    return None
