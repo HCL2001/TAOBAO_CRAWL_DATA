@@ -1317,6 +1317,9 @@ body #accscreen {
             json_content = script_content[start_index + 20: end_index]
             detail_link_value = "https:" + json_content
 
+    if detail_link_value == "" or detail_link_value is None:
+        return "Detail link is empty"
+
     product = detailValueV2(detail_link_value, title)
 
     return product
