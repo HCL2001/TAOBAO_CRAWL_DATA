@@ -67,9 +67,9 @@ def login(request_data: schemas.LoginRequest, db: Session = Depends(get_db)):
     else:
         raise HTTPException(status_code=404, detail="User not found")
 
-# @app.post('/register')
-# def register(request_data: schemas.RegisterRequest, db: Session = Depends(get_db)):
-#     return False
+@app.post('/register')
+def register(request_data: schemas.RegisterRequest, db: Session = Depends(get_db)):
+    return False
 
 
 @app.get("/taobao/{keyWord}", dependencies=[Depends(validate_token)])
