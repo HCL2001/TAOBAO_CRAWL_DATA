@@ -30,6 +30,7 @@ def check_username_exists(db: Session, username: str) -> bool:
     return db.query(models.Account).filter(models.Account.username == username).first() is not None
 
 
+
 def get_account_by_username(db: Session, username: str):
     try:
         account = db.query(models.Account).filter(models.Account.username == username).first()
