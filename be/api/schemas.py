@@ -4,6 +4,7 @@ class SearchProduct(BaseModel):
     id: int
     name: str
     price: str
+    shopName: str
     link: str
 
     class Config:

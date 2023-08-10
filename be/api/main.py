@@ -1,6 +1,6 @@
 from fastapi import Depends, FastAPI, HTTPException
 from starlette.middleware.cors import CORSMiddleware
-
+from starlette.responses import JSONResponse
 import crud
 import models
 import config
@@ -78,6 +78,7 @@ def check_token_expire(check_token: schemas.CheckToken):
 async def get_list(page_number: int = 1, items_per_page: int = 10):
     return crud.get_data_from_db(page_number, items_per_page)
 
+
 @app.get("/detail")
 def get_detail(id):
     if(id == "" or id == None):
@@ -88,7 +89,13 @@ def get_detail(id):
 def test_function():
     return crud.demo_function()
 
+
+
+
+
+
 @app.get("/patternDetail")
 def pattern_Detail():
     return crud.patternForDetail()
+
 
