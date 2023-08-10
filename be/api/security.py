@@ -19,6 +19,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def check_password_hash(password, account_pass):
+
     return pwd_context.verify(password, account_pass)
 
 def verify_password(username, password, db):

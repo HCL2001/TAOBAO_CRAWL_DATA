@@ -21,6 +21,7 @@ import ProductDetailDto
 
 def update_token(username: str, token: str, db: Session):
     account = db.query(models.Account).filter(models.Account.username == username).first()
+
     if account:
         account.token = token
         db.commit()
