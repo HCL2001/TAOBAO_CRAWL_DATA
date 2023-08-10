@@ -1945,7 +1945,7 @@ def get_cart_with_items(username):
         cart_items = cart.cart_items
 
         if cart_items == "" or cart_items is None:
-            return "Cart is empty"
+            return "Cart items is empty"
 
         # Serialize the cart and cart items
         cart_data = {
