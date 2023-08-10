@@ -21,15 +21,13 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def check_password_hash(password, account_pass):
     return pwd_context.verify(password, account_pass)
 
-
 def verify_password(username, password, db):
     try:
-        account = crud.get_user_by_username(db, username).first()
-        check_pass = check_password_hash(password, account.password)
-        if account and check_pass:
-            return True
-        else:
-            return False
+        if username and crud.check_username_exists(db, username):
+            account = crud.get_account_by_username(db, username)
+            if account and check_password_hash(password, account.password):
+                return True
+        return False
     except Exception as e:
         return {
             'status': 'failed',
@@ -37,6 +35,7 @@ def verify_password(username, password, db):
         }
     finally:
         db.close()
+
 
 
 def generate_token(username: Union[str, Any]) -> str:

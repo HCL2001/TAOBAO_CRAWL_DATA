@@ -50,7 +50,7 @@ def get_db():
 
 @app.post('/login')
 def login(request_data: schemas.LoginRequest, db: Session = Depends(get_db)):
-    print(f'[x] request_data: {request_data.__dict__}')
+    # print(f'[x] request_data: {request_data.__dict__}')
     if verify_password(username=request_data.username, password=request_data.password, db=db):
         token = generate_token(request_data.username)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[SECURITY_ALGORITHM])
