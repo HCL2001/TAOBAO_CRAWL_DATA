@@ -18,6 +18,7 @@ class SearchProduct(BaseModel):
 #     class Config:
 #         orm_mode = True
 # Login ___________________________________________________________________________
+
 class LoginRequest(BaseModel):
     username: str
     password: str
