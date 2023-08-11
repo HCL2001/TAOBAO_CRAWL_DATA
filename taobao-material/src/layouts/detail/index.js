@@ -38,16 +38,7 @@ const DetailPage = () => {
               <Typography variant="subtitle1">Colors:</Typography>
               <div>
                 {productDetail.colors.map((color, index) => (
-                  <Button
-                    key={index}
-                    variant="outlined"
-                    color="primary"
-                    sx={{
-                      marginRight: 1,
-                      backgroundColor: color.toLowerCase(),
-                      color: "white",
-                    }}
-                  >
+                  <Button key={index} variant="outlined" color="primary" sx={{ marginRight: 1 }}>
                     {color}
                   </Button>
                 ))}

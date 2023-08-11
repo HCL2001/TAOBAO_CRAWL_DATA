@@ -15,9 +15,40 @@ from sqlalchemy.orm import Session
 import database
 import models
 import constants
-
 import requests
 import ProductDetailDto
+import schemas
+import security
+
+# Login
+def update_token(username: str, token: str, db: Session):
+    account = db.query(models.Account).filter(models.Account.username == username).first()
+    if account:
+        account.token = token
+        db.commit()
+
+def check_username_exists(db: Session, username: str) -> bool:
+    return db.query(models.Account).filter(models.Account.username == username).first() is not None
+
+def get_account_by_username(db: Session, username: str):
+    try:
+        account = db.query(models.Account).filter(models.Account.username == username).first()
+        return account
+    except Exception as e:
+        return None
+    finally:
+        db.close()
+
+# Register
+def register_new_user(request_data: schemas.RegisterRequest, db: Session):
+    new_hashed_password = security.hashed_password(request_data.password)
+    new_user = models.Account(
+        username=request_data.username,
+        password=new_hashed_password,
+        token="")  # Chưa có token khi đăng ký
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
 
 
 async def register():
@@ -497,219 +528,6 @@ def detailValue(link: str, linkDetail: str, list: list):
             product_list.append(objectProduct)
             count += 1;
         print(product_list)
-
-
-def demo_function():
-    translator = Translator()
-    product_data = {
-        "code": 200,
-        "msg": "success",
-        "data": {
-            "item_id": 690907579222,
-            "product_url": "https://item.taobao.com/item.htm?id=690907579222",
-            "title": "纯种英短蓝猫活体蓝白猫幼崽矮脚猫小猫咪活物宠物猫咪英国短毛猫",
-            "main_imgs": [
-                "https://gd1.alicdn.com/imgextra/i4/2206570330851/O1CN01RnAEkF1I9nqGOJS1K_!!2206570330851.jpg",
-                "https://gd1.alicdn.com/imgextra/i1/2206570330851/O1CN011siQez1I9nqEBQys1_!!2206570330851.jpg",
-                "https://gd4.alicdn.com/imgextra/i4/2206570330851/O1CN01iyzWFb1I9nqL8mOaO_!!2206570330851.jpg",
-                "https://gd3.alicdn.com/imgextra/i3/2206570330851/O1CN01ftjgnv1I9nqJH5DTQ_!!2206570330851.png",
-                "https://gd3.alicdn.com/imgextra/i3/2206570330851/O1CN01PiJNO51I9nq9ownmv_!!2206570330851.jpg"
-            ],
-            "video_url": "http://cloud.video.taobao.com/play/u/p/1/e/6/t/1/383191028173.mp4",
-            "currency": "CNY",
-            "price_info": {
-                "price": "800.0",
-                "origin_price": "800.0"
-            },
-            "comment_count": "null",
-            "category_id": 50016383,
-            "root_category_id": "null",
-            "product_props": [
-                {
-                    "品牌": "宝贝它"
-                },
-                {
-                    "动物性别": "公 母"
-                },
-                {
-                    "宠物毛长": "短毛"
-                },
-                {
-                    "颜色分类": "蓝色"
-                },
-                {
-                    "猫咪品种": "俄罗斯蓝猫"
-                },
-                {
-                    "血统信息": "有血统证书"
-                },
-                {
-                    "免疫驱虫": "已做完"
-                },
-                {
-                    "宠物年龄": "幼年猫(12月以下)"
-                },
-                {
-                    "卖家资质分类": "猫舍"
-                }
-            ],
-            "delivery_info": {
-                "area_from": [
-                    "广东省",
-                    "深圳市"
-                ],
-                "area_id": "",
-                "postage": "0"
-            },
-            "shop_info": {
-                "shop_id": 260638490,
-                "seller_id": 2206570330851,
-                "shop_name": "喵爪爪萌宠生活馆",
-                "shop_url": "https://shop260638490.taobao.com",
-                "shop_logo": "",
-                "shop_rate": [
-                    {
-                        "title": "宝贝描述",
-                        "type": "desc",
-                        "score": 4.53036
-                    },
-                    {
-                        "title": "卖家服务",
-                        "type": "serv",
-                        "score": 4.54464
-                    },
-                    {
-                        "title": "物流服务",
-                        "type": "post",
-                        "score": 4.54643
-                    }
-                ],
-                "shop_start_time": "null",
-                "good_rate_percentage": "null",
-                "followers": "null",
-                "is_tmall": "false",
-                "wangwang": "https://amos.alicdn.com/getcid.aw?groupid=0&s=1&Co1NDI&charset=utf-8&uid=tb469223107&site=cntaobao&Qxv3ba"
-            },
-            "sku_props": [
-                {
-                    "pid": "21241",
-                    "prop_name": "动物性别",
-                    "values": [
-                        {
-                            "vid": "3873886",
-                            "name": "公",
-                            "imageUrl": "null"
-                        },
-                        {
-                            "vid": "9999473",
-                            "name": "母",
-                            "imageUrl": "null"
-                        }
-                    ]
-                },
-                {
-                    "pid": "1627207",
-                    "prop_name": "颜色分类",
-                    "values": [
-                        {
-                            "vid": "28338",
-                            "name": "蓝色",
-                            "imageUrl": "null"
-                        }
-                    ]
-                },
-                {
-                    "pid": "122276097",
-                    "prop_name": "宠物年龄",
-                    "values": [
-                        {
-                            "vid": "493262420",
-                            "name": "幼年猫(12月以下)",
-                            "imageUrl": "null"
-                        }
-                    ]
-                }
-            ],
-            "skus": [
-                {
-                    "skuid": "4908202864795",
-                    "sale_price": "800.0",
-                    "origin_price": "1500.0",
-                    "stock": 200,
-                    "props_ids": "21241:3873886;1627207:28338;122276097:493262420",
-                    "props_names": "动物性别:公;颜色分类:蓝色;宠物年龄:幼年猫(12月以下)",
-                    "sub_price": "null",
-                    "sub_price_type": "discounted price"
-                },
-                {
-                    "skuid": "4908202864796",
-                    "sale_price": "800.0",
-                    "origin_price": "1500.0",
-                    "stock": 200,
-                    "props_ids": "21241:9999473;1627207:28338;122276097:493262420",
-                    "props_names": "动物性别:母;颜色分类:蓝色;宠物年龄:幼年猫(12月以下)",
-                    "sub_price": "null",
-                    "sub_price_type": "discounted price"
-                }
-            ],
-            "extra": "False"
-        }
-    }
-
-    url = "http://api.tmapi.top/taobao/item_detail"
-
-    querystring = {"apiToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VybmFtZSI6Imxvbmdob2FuZzA5MTFWTiIsIkNvbWlkIjpudWxsLCJSb2xlaWQiOm51bGwsImlzcyI6InRtYXBpIiwic3ViIjoibG9uZ2hvYW5nMDkxMVZOIiwiYXVkIjpbIiJdfQ.Nh5V5JaZlWP7lbGv_vNbANGRY1GUERGOWq0vE6lSTV8", "item_id": 714246212072}
-
-    response = requests.get(url, params=querystring)
-
-    if response.status_code != 200:
-        print(response.status_code)
-        return "Out of session"
-
-    data = response.json()
-
-    # Extract relevant data from the JSON response
-    title = translator.translate(data["data"]["title"], src=constants.CHINESE, dest=constants.VIETNAMESE).text
-    product_url = data["data"]["product_url"]
-    main_imgs = data["data"]["main_imgs"]
-    product_props = data["data"].get("product_props", [])
-    sku_props = data["data"].get("sku_props", [])
-    skus = data["data"].get("skus", [])
-
-    # Translate the elements in product_props list
-    translated_product_props = [translate_text(prop, constants.VIETNAMESE) for prop in product_props]
-
-    # Translate the elements in sku_props list
-    translated_sku_props = [translate_text(prop, constants.VIETNAMESE) for prop in sku_props]
-
-    translated_skus = []
-
-    for sku in skus:
-        translated_sku = sku.copy()  # Create a copy of the original sku
-        if "props_names" in sku:
-            props_names = sku["props_names"]
-            translated_props = []
-            props_list = props_names.split(';')
-            for prop in props_list:
-                translated_prop = translate_text(prop, constants.VIETNAMESE)
-                translated_props.append(translated_prop)
-            translated_sku["props_names"] = ';'.join(translated_props)
-        translated_skus.append(translated_sku)
-
-
-    # Create the ProductDto object
-    product_dto = ProductDetailDto.ProductDto(title, product_url, main_imgs, translated_product_props, translated_sku_props, translated_skus)
-
-
-
-    # Access the data
-    # print(product_dto.get_title())
-    # print(product_dto.get_main_imgs())
-    # print(product_dto.get_product_props())
-    # print(product_dto.get_sku_props())
-    # print(product_dto.get_skus())
-
-    return product_dto
 
 
 def translate_text(text, target_language):

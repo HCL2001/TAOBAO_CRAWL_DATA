@@ -25,3 +25,6 @@ yarn-error.log*
 
 #ConfigDatabase
 /api/config.py
+
+# pyc
+__pycache__/*.pyc

@@ -50,17 +50,31 @@ def get_db():
 
 @app.post('/login')
 def login(request_data: schemas.LoginRequest, db: Session = Depends(get_db)):
-    print(f'[x] request_data: {request_data.__dict__}')
+    # print(f'[x] request_data: {request_data.__dict__}')
     if verify_password(username=request_data.username, password=request_data.password, db=db):
         token = generate_token(request_data.username)
+
         payload = jwt.decode(token, SECRET_KEY, algorithms=[SECURITY_ALGORITHM])
         expiration_time = datetime.fromtimestamp(payload["exp"])
+
+        # Cập nhật token vào cơ sở dữ liệu
+        crud.update_token(username=request_data.username, token=token, db=db)
+
         return {
             'token': token,
             'expiration_time': expiration_time
         }
     else:
         raise HTTPException(status_code=404, detail="User not found")
+
+@app.post('/register')
+def register(request_data: schemas.RegisterRequest, db: Session = Depends(get_db)):
+    user = db.query(models.Account).filter(models.Account.username == request_data.username).first()
+    if user:
+        raise HTTPException(status_code=400, detail="Username already exists")
+    crud.register_new_user(request_data, db)
+    return {"message": "Registration successful"}
+
 
 @app.get("/taobao/{keyWord}", dependencies=[Depends(validate_token)])
 async def search_taobao(keyWord: str):

@@ -9,7 +9,6 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import DataTable from "examples/Tables/DataTable";
-import { Link as RouterLink } from "react-router-dom";
 
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
@@ -26,7 +25,6 @@ import {
   Typography,
   CircularProgress,
   Link,
-  Pagination,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "examples/Header/Header";
@@ -38,29 +36,119 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 function ListData() {
-  const theme = useTheme();
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const authToken = JSON.parse(JSON.stringify(localStorage.getItem("token")));
   const [selectedRowIds, setSelectedRowIds] = useState([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const theme = useTheme();
+  const [form, setForm] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
   const [loading, setLoading] = useState(false);
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  };
+  const handleSubmit = async (e) => {
+    setLoading(true);
+    if (form.search) {
+      try {
+        const response = await axios.get(API_BASE_URL + "/search/" + form.search, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        setData(response.data);
+        setSelectedRowIds([]);
+        console.log(response.data);
+        console.log("Yêu cầu đã được gửi thành công!");
+      } catch (error) {
+        if (error.message === "Request failed with status code 403") {
+          window.location.reload();
+        } else {
+          toast.error(error.code, {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 3000,
+            hideProgressBar: true,
+          });
+        }
+      }
+    } else {
+      toast.error("Bạn vui lòng nhập từ khóa vào ô search!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+        hideProgressBar: true,
+      });
+    }
+    setLoading(false);
+    setIsButtonDisabled(true);
+  };
+
   const [open, setOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const [page, setPage] = useState(1); // Current page
-  const pageSize = 10; // Number of items per page
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  const startIndex = (page - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
+  const handleConfirm = async () => {
+    setOpen(false);
+    try {
+      const response = await axios.post(
+        API_BASE_URL + "/link",
+        {
+          s_links: selectedRows,
+          id_brand: 1,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      console.log(response.data);
+      if (response.data.size != 0) {
+        toast.success("Bạn đã lưu " + response.data.size + " link thành công!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+      } else {
+        toast.error("Link đã tồn tại!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+      }
+    } catch (error) {
+      if (error.message === "Request failed with status code 403") {
+        window.location.reload();
+      } else {
+        toast.error(error.code, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+          hideProgressBar: true,
+        });
+      }
+    }
+  };
+  const handleModal = async () => {
+    setOpen(true);
+  };
 
-  // ... Your existing functions
+  const handleCancel = async () => {
+    setOpen(false);
+  };
 
   async function fetchListData(pageNumber, itemsPerPage) {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token"); // Replace with your token value
     const headers = new Headers({
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`, // Add your authorization token here
+      "Content-Type": "application/json", // Set the content type to JSON (if required)
     });
 
     const options = {
@@ -69,8 +157,9 @@ function ListData() {
     };
 
     try {
+      // const response = await fetch("/list?page_number=${pageNumber}&items_per_page=${itemsPerPage}");
       const response = await fetch(
-        `${API_BASE_URL}/list?page_number=${pageNumber}&items_per_page=${itemsPerPage}`,
+        `${API_BASE_URL} + "/list?page_number=${1}&items_per_page=${itemsPerPage}"`,
         options
       );
       if (!response.ok) {
@@ -84,24 +173,24 @@ function ListData() {
     }
   }
 
+  const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    const fetchDataOnMount = async () => {
+    const fetchDataAndAppend = async () => {
       setIsLoading(true);
       try {
-        const newData = await fetchListData(currentPage, 10);
-        if (newData !== null && newData !== undefined) {
-          setData(newData);
-          setIsButtonDisabled(newData.length === 0);
-        } else {
-          setIsButtonDisabled(true);
-        }
+        const newData = await fetchData(currentPage);
+        setData((prevData) => [...prevData, ...newData]);
+        console.log(newData);
       } catch (error) {
-        console.error("Error:", error);
+        // Handle error if needed
       }
       setIsLoading(false);
     };
 
-    fetchDataOnMount();
+    fetchDataAndAppend();
   }, [currentPage]);
 
   const columns = [
@@ -114,22 +203,6 @@ function ListData() {
       field: "name",
       headerName: "Name",
       width: 400,
-      renderCell: (params) => {
-        const { id, name } = params.row;
-        return (
-          <RouterLink
-            to={`/detail/${id}`}
-            style={{
-              color: "white",
-              textDecoration: "none",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {name}
-          </RouterLink>
-        );
-      },
     },
     {
       field: "price",
@@ -166,16 +239,12 @@ function ListData() {
     },
   ];
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <Box pt={6} pb={3}>
+      <MDBox pt={6} pb={3}>
         <ToastContainer />
-        <Header title="TAOBAO" subtitle="List Data" />
+        <Header title="TAOBAO" subtitle="List product in database" />
         <Box
           mt="40px"
           height="75vh"
@@ -192,8 +261,7 @@ function ListData() {
               borderBottom: "none",
             },
             "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.info.light,
-              color: "white!important",
+              backgroundColor: theme.palette.primary.light,
             },
             "& .MuiDataGrid-footerContainer": {
               backgroundColor: theme.palette.background.alt,
@@ -219,7 +287,31 @@ function ListData() {
           }}
         >
           <Grid item xs={10} sm={8} md={6} lg={4}>
-            {/* ... (Search bar and button) */}
+            <Box sx={{ display: "flex", mb: 3 }}>
+              <TextField
+                fullWidth
+                label="Search"
+                name="search"
+                onChange={handleChange}
+                variant="outlined"
+                size="small"
+                style={{ width: 200, minWidth: 200, maxWidth: 800 }}
+                onKeyDown={handleKeyDown}
+              />
+              <IconButton onClick={handleSubmit}>
+                {loading ? <CircularProgress size={24} /> : <FilterAltIcon />}
+              </IconButton>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginLeft: "auto" }}
+                onClick={handleModal}
+                disabled={isButtonDisabled}
+                endIcon={<ChevronRightIcon />}
+              >
+                Submit
+              </Button>
+            </Box>
           </Grid>
           <DataGrid
             getRowId={(row) => row.id}
@@ -229,9 +321,9 @@ function ListData() {
             disableRowSelectionOnClick
             initialState={{
               ...data.initialState,
-              pagination: { paginationModel: { pageSize: 5 } },
+              pagination: { paginationModel: { pageSize: 10 } },
             }}
-            pageSizeOptions={[5, 10, 25]}
+            pageSizeOptions={[10, 20, 30]}
             onRowSelectionModelChange={(ids) => {
               setSelectedRowIds(ids);
               const selectedIDs = new Set(ids);
@@ -246,7 +338,38 @@ function ListData() {
             rowSelectionModel={selectedRowIds}
           />
         </Box>
-      </Box>
+        <Modal open={open} onClose={handleClose}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: theme.palette.primary[700],
+              borderRadius: 8,
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+              p: 4,
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+              Xác nhận Lưu vào Danh sách
+            </Typography>
+            <Typography variant="body1" component="p" sx={{ mb: 4 }}>
+              Bạn có chắc chắn muốn lưu những sản phẩm đã chọn vào danh sách không?
+            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <Button variant="contained" color="error" onClick={handleCancel} sx={{ mr: 2 }}>
+                Cancel
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleConfirm}>
+                Confirm
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+      </MDBox>
       <Footer />
     </DashboardLayout>
   );
