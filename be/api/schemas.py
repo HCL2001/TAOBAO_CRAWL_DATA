@@ -4,6 +4,7 @@ class SearchProduct(BaseModel):
     id: int
     name: str
     price: str
+    shopName: str
     link: str
 
     class Config:
@@ -22,6 +23,9 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
 
 class CheckToken(BaseModel):
     token: str
