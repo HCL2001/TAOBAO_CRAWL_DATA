@@ -33,9 +33,6 @@ import Header from "examples/Header/Header";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API_BASE_URL } from "assets/api/api";
-import IconButton from "@mui/material/IconButton";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 function ListData() {
   const theme = useTheme();
@@ -88,7 +85,7 @@ function ListData() {
     const fetchDataOnMount = async () => {
       setIsLoading(true);
       try {
-        const newData = await fetchListData(currentPage, 10);
+        const newData = await fetchListData(currentPage, 50);
         if (newData !== null && newData !== undefined) {
           setData(newData);
           setIsButtonDisabled(newData.length === 0);
@@ -229,9 +226,9 @@ function ListData() {
             disableRowSelectionOnClick
             initialState={{
               ...data.initialState,
-              pagination: { paginationModel: { pageSize: 5 } },
+              pagination: { paginationModel: { pageSize: 10 } },
             }}
-            pageSizeOptions={[5, 10, 25]}
+            pageSizeOptions={[10, 30, 50]}
             onRowSelectionModelChange={(ids) => {
               setSelectedRowIds(ids);
               const selectedIDs = new Set(ids);

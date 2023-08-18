@@ -63,7 +63,19 @@ def login(request_data: schemas.LoginRequest, db: Session = Depends(get_db)):
 
 @app.get("/taobao/{keyWord}", dependencies=[Depends(validate_token)])
 async def search_taobao(keyWord: str):
-    return await crud.crawl_taobao(keyWord)
+    return await  crud.crawl_taobao(keyWord)
+@app.post("/login_taobao")
+def login_taobao_api():
+    try:
+        username = "0084818822357"
+        password = "Aa@123123"
+        url = "https://login.taobao.com/"
+        crud.startBot(username, password, url)  # Gọi hàm startBot từ module crud
+        return {"message": "Login and startBot successful"}
+    except Exception as e:
+        return {"message": "Login or startBot failed", "error": str(e)}
+
+
 
 @app.post('/expired/')
 def check_token_expire(check_token: schemas.CheckToken):
@@ -74,11 +86,11 @@ async def get_list(page_number: int = 1, items_per_page: int = 10):
     return crud.get_data_from_db(page_number, items_per_page)
 
 
-@app.get("/detail")
-def get_detail(id):
-    if(id == "" or id == None):
+@app.get("/detail/{id}")
+def get_detail(id : int):
+    if id is None:
         return "id is null"
-    return crud.detail()
+    return crud.get_detail_from_db(id)
 
 @app.get("/demo")
 def test_function():

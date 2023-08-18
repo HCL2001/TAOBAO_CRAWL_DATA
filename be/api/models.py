@@ -15,6 +15,7 @@ class SearchProduct(Base):
     link = Column(Text)  # Sử dụng cột TEXT cho các URL dài
     image = Column(String(1020))
 
+
 class Account(Base):
     __tablename__ = "account"
 

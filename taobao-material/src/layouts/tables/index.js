@@ -59,15 +59,15 @@ function Search() {
     }
   };
 
-  // const [page, setPage] = useState(1);
-  // const pageSize = 10;
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
 
-  // const startIndex = (page - 1) * pageSize;
-  // const endIndex = startIndex + pageSize;
+  const startIndex = (page - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
 
-  // const handlePageChange = (event, value) => {
-  //   setPage(value);
-  // };
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   const handleSubmit = async (e) => {
     if (isSubmitting) {
@@ -94,12 +94,6 @@ function Search() {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
         hideProgressBar: true,
-      });
-
-      // Xóa giá trị ô search nếu có ký tự đặc biệt
-      setForm({
-        ...form,
-        search: "", // Đặt lại giá trị ô search về rỗng
       });
 
       setIsButtonDisabled(false); // Cho phép người dùng submit lại sau khi hiện thông báo lỗi
@@ -303,9 +297,9 @@ function Search() {
                 style={{ width: 200, minWidth: 200, maxWidth: 800 }}
                 onKeyDown={handleKeyDown}
               />
-              <IconButton>
+              {/* <IconButton>
                 {loading ? <CircularProgress size={24} /> : <FilterAltIcon />}
-              </IconButton>
+              </IconButton> */}
               <Button
                 variant="contained"
                 color="primary"
@@ -313,6 +307,7 @@ function Search() {
                 onClick={handleSubmit}
                 endIcon={<ChevronRightIcon />}
               >
+                {loading ? <CircularProgress size={24} /> : <FilterAltIcon />}
                 Submit
               </Button>
             </Box>
