@@ -3,37 +3,35 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import React, { useEffect, useState } from "react";
 import { API_BASE_URL } from "assets/api/api";
 import { useParams } from "react-router-dom";
-
 import axios from "axios";
 
+// Import statements...
+
 const DetailPage = () => {
-  const [productInfo, setProductInfo] = useState(null);
-  const [data, setData] = useState([]);
-  const authToken = JSON.parse(JSON.stringify(localStorage.getItem("token")));
-  console.log(authToken);
+  const { id } = useParams();
+  console.log(id);
+  const [productInfo, setProductInfo] = useState({
+    price: "0.00",
+    image: "",
+    name: "Product Name",
+  });
+
+  const authToken = localStorage.getItem("token");
 
   const fetchProductInfo = async () => {
     try {
-      const token = localStorage.getItem("token");
-      console.log("hieu" + token);
-      if (!token) {
+      if (!authToken) {
         console.error("Token not found in local storage");
         return;
       }
 
-      const headers = new Headers({
+      const headers = {
         Authorization: `Bearer ${authToken}`,
         "Content-Type": "application/json",
-      });
-
-      const options = {
-        method: "GET",
-        headers: headers,
       };
 
-      const response = await fetch(`${API_BASE_URL}/detail/{id}`, options);
+      const response = await fetch(`${API_BASE_URL}/detail/${id}`, { headers });
       const data = await response.json();
-      console.log("data", JSON.stringify(data));
 
       setProductInfo(data);
     } catch (error) {
@@ -45,22 +43,18 @@ const DetailPage = () => {
     fetchProductInfo();
   }, []);
 
-  const firstSku = productInfo?._skus?.[0] || {};
-  const originPrice = firstSku.origin_price || 0;
-  const salePrice = firstSku.sale_price || 0;
-
   return (
     <DashboardLayout>
       <Container>
         <Paper elevation={3} sx={{ padding: 3, marginBottom: 3 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
-              {productInfo && productInfo._main_imgs.length > 0 && (
+              {productInfo.image && (
                 <div>
                   <img
-                    src={productInfo._main_imgs[0]}
+                    src={productInfo.image}
                     style={{ maxWidth: "100%", height: "auto", marginBottom: "10px" }}
-                    alt={productInfo._title}
+                    alt={productInfo.name}
                   />
                 </div>
               )}
@@ -71,29 +65,19 @@ const DetailPage = () => {
                 <div className="product-info">
                   <Grid container spacing={1}>
                     <Grid item xs={12}>
-                      {productInfo && productInfo._title && (
-                        <Typography variant="h6" color="textPrimary">
-                          {productInfo._title}
-                        </Typography>
-                      )}
+                      <Typography variant="h6" color="textPrimary">
+                        {productInfo.name}
+                      </Typography>
                       <Divider sx={{ marginY: 1 }} />
                     </Grid>
                   </Grid>
                 </div>
                 <div className="product-prices" style={{ display: "flex", alignItems: "baseline" }}>
-                  <Typography variant="body2" color="textSecondary" style={{ marginRight: "5px" }}>
-                    <strong>Origin Price:</strong>
+                  <Typography variant="body1" color="textSecondary" style={{ marginRight: "5px" }}>
+                    <strong>Price:</strong>
                   </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    ${originPrice}
-                  </Typography>
-                </div>
-                <div className="product-price" style={{ display: "flex", alignItems: "baseline" }}>
-                  <Typography variant="body2" color="textSecondary" style={{ marginRight: "5px" }}>
-                    <strong>Sale Price:</strong>
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    ${salePrice}
+                  <Typography variant="body1" color="textSecondary">
+                    ¥{productInfo.price}
                   </Typography>
                 </div>
               </div>

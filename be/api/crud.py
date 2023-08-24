@@ -134,7 +134,7 @@ async def crawl_taobao(keyword: str):
     encoded_keyWord = urllib.parse.quote(chinese_keyword, safe='')
 
     chromeOptions = udc.ChromeOptions()
-    chromeOptions.add_argument('--headless')
+    # chromeOptions.add_argument('--headless')
     driver = udc.Chrome(use_subprocess=True, options=chromeOptions)
 
     product_list = []  # List to store product objects
@@ -142,11 +142,12 @@ async def crawl_taobao(keyword: str):
     data_extracted = False  # Flag to check if data has been extracted
 
     try:
-        driver.get(f"https://s.taobao.com/search?initiative_id=staobaoz_20230818&q={encoded_keyWord}")
+        driver.get(f"https://s.taobao.com/search?&q={encoded_keyWord}")
         script_elements = driver.find_elements(By.TAG_NAME, "script")
         g_page_config_script = None
         for script in script_elements:
             script_text = script.get_attribute("innerHTML")
+
             if "g_page_config" in script_text:
                 g_page_config_script = script_text
                 break
@@ -156,6 +157,7 @@ async def crawl_taobao(keyword: str):
             end_index = g_page_config_script.find("}};")
             json_content = g_page_config_script[start_index + 15: end_index + 2]
             g_page_config_json = json.loads(json_content)
+            print(g_page_config_json)
             auctions_data = g_page_config_json['mods']['itemlist']['data']['auctions']
 
             for item in auctions_data:
@@ -177,31 +179,32 @@ async def crawl_taobao(keyword: str):
                     'image': 'https:' + item['pic_url'],
                     'shopName': shopName,
                 }
-                product_list.append(objectDto)
+                if objectDto:
+                    product_list.append(objectDto)
                 counter += 1
                 data_extracted = True  # Dữ liệu đã được lấy thành công
-                if counter == 21:  # Số sản phẩm cần search -1
+                if counter == 11:  # Số sản phẩm cần search -1
                     break
+                print(product_list)
 
-            if data_extracted:
-                driver.quit()
-                # Dùng vòng for in để dịch tên và tên cửa hàng
-            translated_product_list = []
-            for product in product_list:
-                translated_name = translator.translate(product['name'], src=constants.CHINESE,dest=constants.VIETNAMESE)
-                # translated_shopName = translator.translate(product['shopName'], src=constants.CHINESE,dest=constants.VIETNAMESE)
-
-                translated_product = {
-                        'id': product['id'],
-                        'productId': product['productId'],
-                        'name': translated_name.text,
-                        'link': product['link'],
-                        'price': product['price'],
-                        'image': product['image'],
-                        'shopName': product['shopName'],
-                    }
-                translated_product_list.append(translated_product)
-        save_list_data_to_db(translated_product_list)
+            # if data_extracted:
+            #     driver.quit()
+            #     # Dùng vòng for in để dịch tên và tên cửa hàng
+            # translated_product_list = []
+            # for product in product_list:
+            #     translated_name = translator.translate(product['name'], src=constants.CHINESE,dest=constants.VIETNAMESE)
+            #
+            #     translated_product = {
+            #             'id': product['id'],
+            #             'productId': product['productId'],
+            #             'name': translated_name.text,
+            #             'link': product['link'],
+            #             'price': product['price'],
+            #             'image': product['image'],
+            #             'shopName': product['shopName'],
+            #         }
+                product_list.append(objectDto)
+            save_list_data_to_db(product_list)
     except Exception as e:
         print(e)
 
@@ -213,136 +216,12 @@ async def crawl_taobao(keyword: str):
         except OSError:
             pass
 
-    return translated_product_list
+    return product_list
 
 
 
 
-# async def crawl_taobao(keyWord: str):
-#     translator = Translator()
-#     product_list = []
-#
-#     chinese_keyword = translator.translate(keyWord, src=constants.VIETNAMESE, dest=constants.CHINESE).text
-#
-#     user_agent_list = [
-#         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-#         'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-#         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-#         # Các user agent khác
-#     ]
-#
-#     user_agent = random.choice(user_agent_list)
-#     headers = {
-#         'User-Agent': user_agent
-#     }
-#     encoded_keyWord = urllib.parse.quote(chinese_keyword, safe='')
-#     url = f"https://s.taobao.com/search?q={encoded_keyWord}&imgfile=&js=1&stats_click=search_radio_all%3A1&initiative_id=staobaoz_20230815&ie=utf8"
-#     counter = 1
-#
-#     async with aiohttp.ClientSession() as session:
-#         for _ in range(10):  # Số lần lặp có thể điều chỉnh
-#             # Thêm độ trễ ngẫu nhiên từ 1 đến 20 giây
-#             await asyncio.sleep(random.uniform(1, 20))
-#         async with session.get(url, headers=headers) as resp:
-#             content = await resp.text()
-#
-#             # Phân tích cú pháp HTML bằng lxml
-#             tree = html.fromstring(content)
-#
-#             # Tìm tất cả các thẻ script trong cây cú pháp
-#             script_tags = tree.xpath('//script')
-#             for script_tag in script_tags:
-#                 script_content = script_tag.text
-#                 if script_content and "g_page_config" in script_content:
-#                     start_index = script_content.find("g_page_config =")
-#                     end_index = script_content.find("}};")
-#                     json_content = script_content[start_index + 15: end_index + 2]
-#                     try:
-#                         g_page_config_json = json.loads(json_content)
-#                         data = g_page_config_json['mods']['itemlist']['data']['auctions']
-#                         for item in data:
-#                             name = translator.translate(item['raw_title'], src=constants.CHINESE, dest=constants.VIETNAMESE)
-#                             shopName = translator.translate(item['shopName'], src=constants.CHINESE, dest=constants.VIETNAMESE).text
-#                             link = 'https:' + item['detail_url']
-#                             if 'click.simba.taobao' in link:
-#                                 print(f"Ignoring item '{name}' as it contains 'click.taobao' link.")
-#                                 continue
-#
-#                             objectDto = {
-#                                 'id': counter,
-#                                 'productId': item['nid'],
-#                                 'name': name.text,
-#                                 'link': link,
-#                                 'price': item['view_price'],
-#                                 'image': 'https:' + item['pic_url'],
-#                                 'shopName': shopName,
-#                             }
-#                             counter += 1
-#                             product_list.append(objectDto)
-#                             if counter == 21:
-#                                 break
-#                     except json.JSONDecodeError as e:
-#                         print(e)
-#
-#     return product_list
 
-# async def crawl_taobao(keyWord: str):
-#     api_key = "k_86325a13c00b56a2af01c320572cdd9c"
-#     conn = http.client.HTTPSConnection("api.taobao-scraping-api.com")
-#
-#     headers = {
-#         'Content-Type': "application/json",
-#         'APIKey': api_key
-#     }
-#
-#     page_num = 1
-#
-#     query_params = f"?q={keyWord}&pageNum={page_num}"
-#
-#     conn.request("GET", f"/taobao/searchItem{query_params}", headers=headers)
-#
-#     res = conn.getresponse()
-#     data = res.read()
-#     response = json.loads(data.decode("utf-8"))
-#     product_list = []
-#
-#     if 'items' in response:
-#         items = response['items']['item']
-#         if isinstance(items, list):
-#             for item_id, item in enumerate(items, start=1):  # Thêm thuộc tính id tự động tăng
-#                 product = {
-#                     'id': item_id,
-#                     'title': item.get('title', 'N/A'),
-#                     'promotion_price': item.get('promotion_price', 'N/A'),
-#                     'price': item.get('price', 'N/A'),
-#                     'detail_url': item.get('detail_url', 'N/A'),
-#                     'pic_url': item.get('pic_url', 'N/A'),
-#                     'num_iid': item.get('num_iid', 'N/A'),
-#                     'seller_nick': item.get('seller_nick', 'N/A')
-#                 }
-#                 product_list.append(product)
-#         elif isinstance(items, dict):
-#             product = {
-#                 'id': 1,  # Đặt id là 1 vì chỉ có một sản phẩm
-#                 'title': items.get('title', 'N/A'),
-#                 'promotion_price': items.get('promotion_price', 'N/A'),
-#                 'price': items.get('price', 'N/A'),
-#                 'detail_url': items.get('detail_url', 'N/A'),
-#                 'pic_url': items.get('pic_url', 'N/A'),
-#                 'num_iid': items.get('num_iid', 'N/A'),
-#                 'seller_nick': items.get('seller_nick', 'N/A')
-#             }
-#             product_list.append(product)
-#
-#     session = database.SessionLocal()
-#
-#
-#     save_list_data_to_db(product_list, session)
-#
-#
-#     session.close()
-#
-#     return product_list
 def get_token(db: Session, token: str):
     try:
         result = db.query(models.Account).filter(models.Account.token == token)
@@ -428,14 +307,14 @@ def get_detail_from_db(id: int):
         return "Session is null"
 
     try:
-        # Query the database to get price and image URL based on the provided ID
-        data = session.query(models.SearchProduct.price, models.SearchProduct.image).filter(
+        # Query the database to get price, image URL, and name based on the provided ID
+        data = session.query(models.SearchProduct.price, models.SearchProduct.image, models.SearchProduct.name).filter(
             models.SearchProduct.id == id).first()
         print(data)
 
         if data:
-            price, image = data
-            response_data = {"price": price, "image": image}
+            price, image, name = data
+            response_data = {"price": price, "image": image, "name": name}  # Include "name" in the response_data
             return response_data
         else:
             return "Data not found"
@@ -445,6 +324,7 @@ def get_detail_from_db(id: int):
         return "Having error when getting data"
     finally:
         session.close()
+
 
 
 def detail():

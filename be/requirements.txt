@@ -13,5 +13,5 @@ pydantic
 mysqlclient
 PyJWT
 croniter
-googletrans==4.0.0-rc1
+googletrans
 undetected-chromedriver
