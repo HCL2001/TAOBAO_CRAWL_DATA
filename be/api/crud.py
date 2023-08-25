@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import asyncio
 import random
 import sys
@@ -8,6 +9,17 @@ import undetected_chromedriver as uc
 # from selenium.webdriver.chrome.options import Options
 
 # from selenium import webdriver
+=======
+import urllib.parse
+import json
+
+from googletrans import Translator
+import urllib.parse
+
+import sys
+import aiohttp
+from bs4 import BeautifulSoup
+>>>>>>> 6a2ac5e17737ca0855dc9e28fda102c1bf7e0d90
 from sqlalchemy.orm import Session
 import database
 import models
@@ -15,6 +27,7 @@ import constants
 
 import requests
 import ProductDetailDto
+<<<<<<< HEAD
 
 from selenium.webdriver.common.by import By
 from googletrans import Translator
@@ -42,6 +55,9 @@ from googletrans import Translator
 
 
 
+=======
+from decimal import Decimal
+>>>>>>> 6a2ac5e17737ca0855dc9e28fda102c1bf7e0d90
 async def register():
     product_list = []
     headers = {
@@ -128,10 +144,125 @@ def detailLink(link: str, linkDetail: str, list: list):
             count += 1;
         print(product_list)
 
+<<<<<<< HEAD
 async def crawl_taobao(keyword: str):
+=======
+def detail():
+    product_list = []
+    cookie_parameters = {
+        'JSESSIONID': 'A5EA6A1FC6ED9491E8BFE168344D9E7C',
+        '_cc_': 'VFC%2FuZ9ajQ%3D%3D',
+        '_nk_': 'tb627551502528',
+        '_samesite_flag_': 'true',
+        '_tb_token_': 'ee73d9beb6709',
+        'atpsida': 'c1ba942fb3fe1cbf03e466a6_1690536928_9',
+        'aui': '2216209135380',
+        '_tb_token_': '3e3868656177',
+        'cancelledSubSites': 'empty',
+        'cna': 'NVhKHQx8pxABASABDuD094HA',
+        'cna': 'NVhKHQx8pxABASABDuD094HA',
+        'cnaui': '2216209135380',
+        'cookie1': 'AimSwy6Hu0cjkXBiNAEvUR5yUCjEb50QirZe9OQR8JM%3D',
+        'cookie17': 'UUpgQEvyiTEr4C708g%3D%3D',
+        'cookie2': '17baa001cddd95eeac0d14215754e2ba',
+        'csg': 'c5ccb5b5',
+        'dnk': 'tb627551502528',
+        'existShop': 'MTY5MDUzNTUyMQ%3D%3D',
+        'isg': 'BC4udLbkxtq_uDKu-9jGYYETf4TwL_Ipj4a_J1j3mTHsO86VwL6yOUI587_X4-pB',
+        'l': 'fBIQOzNINiq0KI6SBOfZFurza779IIRAguPzaNbMi9fP911p5XodW1O06889CnMNFssBR38PiVPBBeYBqIv4n5U62j-la_HmnmOk-Wf..',
+        'lgc': 'tb627551502528',
+        'sca': '2ce1ff46',
+        'sg': '807',
+        'sgcookie': 'E1004mNHjdedFCalsA3%2BDwxBbDVzpPHNcfgCxQwpMn8WChT8qXmCxiXv2GtRWHqACR5GrqBtYgklE3nsJQ6iHc00COBH86rxO%2FnNB1FZN0UAlGA%3D',
+        'skt': '5f59a84349d9041e',
+        't': '6b6122a7cb9e97ce82d19b64b5cfa46b',
+        'tbsa': '106e86f4144675054773332d_1690536928_9',
+        'tfstk': 'd-N9HuZeMMjGzUMYGVBhgivTTP_hK5UNjlzWimmMhkELlDAc7fXqMonL0cDi1cAxMrE4moUV7qibcon0I9fu7PlqGgcAZ_4aQqlfq1ChKNaZgjsk-I6lwPrygXCFUn1fYdpww7Fx5t_FmoxTl5gtBmpivIdfoVHtVPidVg6a47VJxp-o2qv1Jwp23AgFr-S5t',
+        'tracknick': 'tb627551502528',
+        'uc1': 'cookie21=Vq8l%2BKCLiYYu&cookie14=Uoe9bfibByxgsA%3D%3D&cookie15=U%2BGCWk%2F75gdr5Q%3D%3D&existShop=false&pas=0&cookie16=WqG3DMC9UpAPBHGz5QBErFxlCA%3D%3D',
+        'uc3': 'nk2=F5RDLjqWCLCCNe6Q0ac%3D&vt3=F8dCsGCg2j4K6APJSMg%3D&lg2=UIHiLt3xD8xYTw%3D%3D&id2=UUpgQEvyiTEr4C708g%3D%3D',
+        'uc4': 'id4=0%40U2gqz6QY%2B2LU45CVgCnTHhyjgZBJlJ9d&nk4=0%40FY4I7WSY2SzxeSCD9wJSplBYHJwWmW5zVQ%3D%3D',
+        'x5sec': '7b22617365727665723b32223a226539313338386538643739643266303964613031653838663861323366623766434f4b4d6a71594745506e57343658446c59476b65786f504d6a49784e6a49774f54457a4e544d344d4473324d4f79586a4e4d4451414d3d227d',
+        'xlly_s': '1',
+    }
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; Trident/7.0; AS; rv:11.0) like Gecko'
+    }
+    url = "https://item.taobao.com/item.htm?id=690907579222&ns=1&abbucket=12#detail"
+
+    response = requests.get(url, headers=headers, cookies=cookie_parameters)
+    if response.status_code != 200:
+        return "Fail when getting value"
+    content = response.text
+    soup = BeautifulSoup(content, "html.parser")
+    li_elements_with_data_value = soup.find_all("li", attrs={"data-value": True})
+    print(soup)
+    listName = {}
+    for li in li_elements_with_data_value:
+        data_value = li["data-value"]
+        value = li.span.text.strip()
+        listName[data_value] = value
+    script_tags = soup.find_all("script")
+    for script_tag in script_tags:
+        script_content = script_tag.string
+        if script_content and "Hub.config.set" in script_content:
+            start_index = script_content.find("wholeSibUrl      : '")
+            end_index = script_content.find("tradeContract',")
+            json_content = script_content[start_index + 20: end_index]
+            detailLinkValue = "https:" + json_content
+            print(detailLinkValue)
+    # detailLink(url, detailLinkValue, listName)
+    return product_list
+
+def detailValue(link: str, linkDetail: str, list: list):
+    product_list = []
+    headers = {
+        'Cookie': 't=ec0d5bd680cef4c43c9f71708db31058; cna=BRxOHd8VWAICAXGhLjZWD5TR; xlly_s=1; sgcookie=E100H0swvfyYsdVvyTSCrnObIsrV9Aq5T474B8w3cwP5nWHOe6gtbUcYZOtKadjZUZn5FaAW%2BQ1uJQLhLtsuUfTrufcHNomxvIPXmNQua6gPTPE%3D; uc3=vt3=F8dCsGCl3JWCOZIAnLM%3D&id2=UUpgQEvyiTEr4C708g%3D%3D&lg2=V32FPkk%2Fw0dUvg%3D%3D&nk2=F5RDLjqWCLCCNe6Q0ac%3D; lgc=tb627551502528; uc4=id4=0%40U2gqz6QY%2B2LU45CVgCnTHhyjjD3pXce2&nk4=0%40FY4I7WSY2SzxeSCD9wJSplBYHJHaEX%2BF0g%3D%3D; tracknick=tb627551502528; _cc_=WqG3DMC9EA%3D%3D; ucn=center; thw=xx; mt=ci=0_1; _uetsid=2e532be02f4f11ee80918f9d985d2979; _uetvid=dc870040ea5911ed8305a55f0f12c1b7; _m_h5_tk=bffc85d673ab2f3d0eebe9f130993d22_1690891184157; _m_h5_tk_enc=10d0b322cedd523f3f588213614f9e04; hng=VN%7Czh-CN%7CVNM%7C704; _gid=GA1.2.1343417350.1690881464; _ga=GA1.1.658097477.1690881463; _ga_YFVFB9JLVB=GS1.1.1690881463.1.0.1690881469.0.0.0; _ga_JBTWV3NHSY=GS1.1.1690881463.1.0.1690881469.54.0.0; cookie2=1c358ce26fd4234017e383ab667ef88d; _tb_token_=f60ee6eeeb3fe; isg=BHx8j5M1NMarvgCAdVI0l2epTRoudSCfKWwtSVb672dKIR2rfoeFLsnQAVFZaVj3; l=fBIQOzNINiq0Kv4YBO5Churza77t5BOb8sPzaNbMiIEGa6Th1elM8NC61q3wRdtjQT5Ydetyzs0aOdhw5Ja38AkDBeYIOC0eQCvp-eM3N7AN.; tfstk=dbYJfsv4JxDkLhjpR_nm81N1H2GmiUdyMLR_-9XuAKpvECtlqB6hJppppTjIUaYpHLA6qgAB-6TdzExu-TDPJB9GJADiSVAyaZ7IIA2-zu1rNwb0fsqXaQ7FRS2IjnOP9zV8hGj8YlmIFPYMJ_iIAq7QGsqANgB6MqzQJYfaIOdSuPa6knIcQX8MW-q4IOC3VjhYYkS5gfxECqf..',
+        'Referer': link,
+        'Accept': '*/*',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Language': 'vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Sec-Ch-Ua': '"Not/A)Brand";v="99", "Google Chrome";v="115", "Chromium";v="115"',
+        'Sec-Ch-Ua-Mobile': '?0',
+        'Sec-Ch-Ua-Platform': '"Windows"',
+        'Sec-Fetch-Dest': 'script',
+        'Sec-Fetch-Mode': 'no-cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    }
+    url = linkDetail
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        listPriceData = data['data']['originalPrice']
+        listPrice = {}
+        for key, value in listPriceData.items():
+            listPrice[key.strip(';')] = value['price']
+        del listPrice['def']
+        listPromotionData = data['data']['promotion']['promoData']
+        listPromotion = {}
+        for key, value in listPromotionData.items():
+            listPromotion[key.strip(';')] = value[0]['price']
+        del listPromotion['def']
+        count = 0
+        for key, value in list.items():
+            objectProduct = {
+                'id': count,
+                'price': listPrice[key],
+                'promotion': listPromotion[key],
+                'name': value
+            }
+            product_list.append(objectProduct)
+            count += 1;
+        print(product_list)
+
+
+async def crawl_taobao(keyWord: str):
+>>>>>>> 6a2ac5e17737ca0855dc9e28fda102c1bf7e0d90
     translator = Translator()
     chinese_keyword = translator.translate(keyword, src=constants.VIETNAMESE, dest=constants.CHINESE).text
     encoded_keyWord = urllib.parse.quote(chinese_keyword, safe='')
+<<<<<<< HEAD
 
     chromeOptions = udc.ChromeOptions()
     # chromeOptions.add_argument('--headless')
@@ -215,6 +346,38 @@ async def crawl_taobao(keyword: str):
                     driver.quit()
         except OSError:
             pass
+=======
+    url = f"https://s.taobao.com/search?q={encoded_keyWord}&type=p&tmhkh5=&from=sea_1_searchbutton&catId=100&spm=a2141.241046-vn.searchbar.d_2_searchbox"
+    counter = 1
+    # saveSearch = []
+    # links = db.query(models.SearchProduct).all()
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers=headers, cookies=cookie_parameters) as resp:
+            content = await resp.text()
+            soup = BeautifulSoup(content, "html.parser")
+            print(soup)
+            script_tags = soup.find_all("script")
+        for script_tag in script_tags:
+            script_content = script_tag.string
+            if script_content and "g_page_config" in script_content:
+                start_index = script_content.find("g_page_config =")
+                end_index = script_content.find("}};")
+                json_content = script_content[start_index + 15: end_index + 2]
+                try:
+                    g_page_config_json = json.loads(json_content)
+                    data = g_page_config_json['mods']['itemlist']['data']['auctions']
+                    for item in data:
+                        # print(item)
+                        sys.stdout.flush()
+
+                        name = translator.translate(item['raw_title'], src=constants.CHINESE, dest=constants.VIETNAMESE)
+                        shopName = translator.translate(item['shopName'], src=constants.CHINESE,
+                                                        dest=constants.VIETNAMESE).text
+                        link = 'https:' + item['detail_url']
+                        if 'click.simba.taobao' in link:
+                            print(f"Ignoring item '{name}' as it contains 'click.taobao' link.")
+                            continue
+>>>>>>> 6a2ac5e17737ca0855dc9e28fda102c1bf7e0d90
 
     return product_list
 
@@ -246,7 +409,7 @@ def error_handler(error):
 def save_list_data_to_db(list_data, error_callback=None):
     session = database.SessionLocal()
 
-    if session == "" or session == None:
+    if session == "" or session is None:
         return "Session is null"
 
     try:
@@ -282,7 +445,7 @@ def save_list_data_to_db(list_data, error_callback=None):
 def get_data_from_db(page_number=1, items_per_page=10):
     session = database.SessionLocal()
 
-    if session == None or session == "":
+    if session is None or session == "":
         return "Session is null"
 
     try:
@@ -373,25 +536,26 @@ def detail():
     response = requests.get(url, headers=headers, cookies=cookie_parameters)
     if response.status_code != 200:
         return "Fail when getting value"
-    content = response.text
-    soup = BeautifulSoup(content, "html.parser")
-    li_elements_with_data_value = soup.find_all("li", attrs={"data-value": True})
-    print(soup)
-    listName = {}
-    for li in li_elements_with_data_value:
-        data_value = li["data-value"]
-        value = li.span.text.strip()
-        listName[data_value] = value
-    script_tags = soup.find_all("script")
-    for script_tag in script_tags:
-        script_content = script_tag.string
-        if script_content and "Hub.config.set" in script_content:
-            start_index = script_content.find("wholeSibUrl      : '")
-            end_index = script_content.find("tradeContract',")
-            json_content = script_content[start_index + 20: end_index]
-            detailLinkValue = "https:" + json_content
-            print(detailLinkValue)
-    # detailLink(url, detailLinkValue, listName)
+    print(response.json())
+    # content = response.text
+    # soup = BeautifulSoup(content, "html.parser")
+    # li_elements_with_data_value = soup.find_all("li", attrs={"data-value": True})
+    # print(soup)
+    # listName = {}
+    # for li in li_elements_with_data_value:
+    #     data_value = li["data-value"]
+    #     value = li.span.text.strip()
+    #     listName[data_value] = value
+    # script_tags = soup.find_all("script")
+    # for script_tag in script_tags:
+    #     script_content = script_tag.string
+    #     if script_content and "Hub.config.set" in script_content:
+    #         start_index = script_content.find("wholeSibUrl      : '")
+    #         end_index = script_content.find("tradeContract',")
+    #         json_content = script_content[start_index + 20: end_index]
+    #         detailLinkValue = "https:" + json_content
+    #         print(detailLinkValue)
+    # # detailLink(url, detailLinkValue, listName)
     return product_list
 
 
@@ -438,6 +602,7 @@ def detailValue(link: str, linkDetail: str, list: list):
         print(product_list)
 
 
+<<<<<<< HEAD
 def demo_function():
     translator = Translator()
     product_data = {
@@ -697,6 +862,8 @@ if __name__ == "__main__":
     main()
 
 
+=======
+>>>>>>> 6a2ac5e17737ca0855dc9e28fda102c1bf7e0d90
 def translate_text(text, target_language):
     translator = Translator()
     # Replace this with your actual translation API call
@@ -704,8 +871,8 @@ def translate_text(text, target_language):
     translated_text = translator.translate(str(text), src=constants.CHINESE, dest=target_language).text
     return translated_text
 
-def patternForDetail():
 
+def patternForDetailV2():
     global detail_link_value
     chromeOptions = udc.ChromeOptions()
     chromeOptions.add_argument('--headless')
@@ -715,6 +882,7 @@ def patternForDetail():
 
 
     # Find the <h3> tag with class 'tb-main-title' and get the value of data-title attribute
+<<<<<<< HEAD
     #title = Translator().translate(soup.find('h3', class_='tb-main-title')['data-title'], src=constants.CHINESE, dest=constants.VIETNAMESE).text
 
     # script_tags = soup.find_all("script")
@@ -729,12 +897,31 @@ def patternForDetail():
     # product = detailValueV2(detail_link_value, title)
     #
     # return product
+=======
+    title = Translator().translate(soup.find('h3', class_='tb-main-title')['data-title'], src=constants.CHINESE,
+                                   dest=constants.VIETNAMESE).text
 
-def detailValueV2(linkDetail: str, title : str):
-    if linkDetail == None or linkDetail == "":
+    script_tags = soup.find_all("script")
+    for script_tag in script_tags:
+        script_content = script_tag.string
+        if script_content and "Hub.config.set" in script_content:
+            start_index = script_content.find("wholeSibUrl      : '")
+            end_index = script_content.find("tradeContract',")
+            json_content = script_content[start_index + 20: end_index]
+            detail_link_value = "https:" + json_content
+
+    if detail_link_value == "" or detail_link_value is None:
+        return "Detail link is empty"
+
+    product = detailValueV2(detail_link_value, title)
+
+    return product
+>>>>>>> 6a2ac5e17737ca0855dc9e28fda102c1bf7e0d90
+
+
+def detailValueV2(linkDetail: str, title: str):
+    if linkDetail is None or linkDetail == "":
         return "Empty link"
-    if title == None or title == "":
-        return "Empty name"
     translator = Translator()
     # product_list = []
     # headers = {
@@ -759,91 +946,91 @@ def detailValueV2(linkDetail: str, title : str):
     #     return "Failed"
     # data = response.json()
     data = {
-         'code': 200,
-         'data': {'category_id': 217309,
-                  'comment_count': None,
-                  'currency': 'CNY',
-                  'delivery_info': {'area_from': ['上海市'],
-                                    'area_id': '',
-                                    'postage': '0'},
-                  'extra': 'False',
-                  'item_id': 726085758711,
-                  'main_imgs': [
-                      'https://gd4.alicdn.com/imgextra/i4/2215542721611/O1CN01S1Y1fY1Nlsukv6PFc_!!2215542721611.jpg',
-                      'https://gd3.alicdn.com/imgextra/i3/2215542721611/O1CN01GSYG6i1NlsupoYJOe_!!2215542721611.jpg',
-                      'https://gd3.alicdn.com/imgextra/i3/2215542721611/O1CN01zlOh721NlsuitvfgA_!!2215542721611.jpg',
-                      'https://gd2.alicdn.com/imgextra/i2/2215542721611/O1CN01L9tICh1NlsupoqAO3_!!2215542721611.jpg',
-                      'https://gd2.alicdn.com/imgextra/i2/2215542721611/O1CN019MUetm1NlsuoGFRGm_!!2215542721611.jpg'],
-                  'price_info': {'origin_price': '300.0', 'price': '300.0'},
-                  'product_props': [{'狗狗品种': '比熊'},
-                                    {'动物性别': '公 母'},
-                                    {'毛长': '中毛(如雪纳瑞/萨摩耶等)'},
-                                    {'颜色分类': '白色'},
-                                    {'狗狗种类': '家庭犬'},
-                                    {'血统信息': '有血统证书'},
-                                    {'免疫驱虫': '已做完'},
-                                    {'宠物体型': '玩具犬(成年体重<4kg，肩高<25cm)'},
-                                    {'级别': 'S参赛级'},
-                                    {'宠物年龄': '幼年犬(45日龄-12月龄)'},
-                                    {'卖家资质分类': '宠物店'}],
-                  'product_url': 'https://item.taobao.com/item.htm?id=726085758711',
-                  'root_category_id': None,
-                  'shop_info': {'followers': None,
-                                'good_rate_percentage': None,
-                                'is_tmall': False,
-                                'seller_id': 2215542721611,
-                                'shop_id': 498428785,
-                                'shop_logo': '',
-                                'shop_name': '萌新宠物馆',
-                                'shop_rate': [{'score': 4.99609,
-                                               'title': '宝贝描述',
-                                               'type': 'desc'},
-                                              {'score': 4.99609,
-                                               'title': '卖家服务',
-                                               'type': 'serv'},
-                                              {'score': 4.99609,
-                                               'title': '物流服务',
-                                               'type': 'post'}],
-                                'shop_start_time': None,
-                                'shop_url': 'https://shop498428785.taobao.com',
-                                'wangwang': 'https://amos.alicdn.com/getcid.aw?groupid=0&s=1&Im5SKL&charset=utf-8&uid=%E4%B8%8A%E6%B5%B7%E5%AE%A0%E7%89%A9%E5%9F%BA%E5%9C%B097&site=cntaobao&kJYNcf'},
-                  'sku_props': [{'pid': '21241',
-                                 'prop_name': '动物性别',
-                                 'values': [{'imageUrl': None,
-                                             'name': '母',
-                                             'vid': '9999473'},
-                                            {'imageUrl': None,
-                                             'name': '公',
-                                             'vid': '3873886'}]},
-                                {'pid': '1627207',
-                                 'prop_name': '颜色分类',
-                                 'values': [{'imageUrl': None,
-                                             'name': '白色',
-                                             'vid': '28320'}]},
-                                {'pid': '122276097',
-                                 'prop_name': '宠物年龄',
-                                 'values': [{'imageUrl': None,
-                                             'name': '幼年犬(45日龄-12月龄)',
-                                             'vid': '97077986'}]}],
-                  'skus': [{'origin_price': '1500.0',
-                            'props_ids': '21241:9999473;1627207:28320;122276097:97077986',
-                            'props_names': '动物性别:母;颜色分类:白色;宠物年龄:幼年犬(45日龄-12月龄)',
-                            'sale_price': '300.0',
-                            'skuid': '5209138662206',
-                            'stock': 200,
-                            'sub_price': None,
-                            'sub_price_type': 'discounted price'},
-                           {'origin_price': '1500.0',
-                            'props_ids': '21241:3873886;1627207:28320;122276097:97077986',
-                            'props_names': '动物性别:公;颜色分类:白色;宠物年龄:幼年犬(45日龄-12月龄)',
-                            'sale_price': '300.0',
-                            'skuid': '5209138662207',
-                            'stock': 200,
-                            'sub_price': None,
-                            'sub_price_type': 'discounted price'}],
-                  'title': '纯种比熊幼犬长不大不掉毛飞耳法国比熊犬小型犬茶杯犬活体宠物狗',
-                  'video_url': 'http://cloud.video.taobao.com/play/u/p/1/e/6/t/1/419427855174.mp4'},
-         'msg': 'success'
+        'code': 200,
+        'data': {'category_id': 217309,
+                 'comment_count': None,
+                 'currency': 'CNY',
+                 'delivery_info': {'area_from': ['上海市'],
+                                   'area_id': '',
+                                   'postage': '0'},
+                 'extra': 'False',
+                 'item_id': 726085758711,
+                 'main_imgs': [
+                     'https://gd4.alicdn.com/imgextra/i4/2215542721611/O1CN01S1Y1fY1Nlsukv6PFc_!!2215542721611.jpg',
+                     'https://gd3.alicdn.com/imgextra/i3/2215542721611/O1CN01GSYG6i1NlsupoYJOe_!!2215542721611.jpg',
+                     'https://gd3.alicdn.com/imgextra/i3/2215542721611/O1CN01zlOh721NlsuitvfgA_!!2215542721611.jpg',
+                     'https://gd2.alicdn.com/imgextra/i2/2215542721611/O1CN01L9tICh1NlsupoqAO3_!!2215542721611.jpg',
+                     'https://gd2.alicdn.com/imgextra/i2/2215542721611/O1CN019MUetm1NlsuoGFRGm_!!2215542721611.jpg'],
+                 'price_info': {'origin_price': '300.0', 'price': '300.0'},
+                 'product_props': [{'狗狗品种': '比熊'},
+                                   {'动物性别': '公 母'},
+                                   {'毛长': '中毛(如雪纳瑞/萨摩耶等)'},
+                                   {'颜色分类': '白色'},
+                                   {'狗狗种类': '家庭犬'},
+                                   {'血统信息': '有血统证书'},
+                                   {'免疫驱虫': '已做完'},
+                                   {'宠物体型': '玩具犬(成年体重<4kg，肩高<25cm)'},
+                                   {'级别': 'S参赛级'},
+                                   {'宠物年龄': '幼年犬(45日龄-12月龄)'},
+                                   {'卖家资质分类': '宠物店'}],
+                 'product_url': 'https://item.taobao.com/item.htm?id=726085758711',
+                 'root_category_id': None,
+                 'shop_info': {'followers': None,
+                               'good_rate_percentage': None,
+                               'is_tmall': False,
+                               'seller_id': 2215542721611,
+                               'shop_id': 498428785,
+                               'shop_logo': '',
+                               'shop_name': '萌新宠物馆',
+                               'shop_rate': [{'score': 4.99609,
+                                              'title': '宝贝描述',
+                                              'type': 'desc'},
+                                             {'score': 4.99609,
+                                              'title': '卖家服务',
+                                              'type': 'serv'},
+                                             {'score': 4.99609,
+                                              'title': '物流服务',
+                                              'type': 'post'}],
+                               'shop_start_time': None,
+                               'shop_url': 'https://shop498428785.taobao.com',
+                               'wangwang': 'https://amos.alicdn.com/getcid.aw?groupid=0&s=1&Im5SKL&charset=utf-8&uid=%E4%B8%8A%E6%B5%B7%E5%AE%A0%E7%89%A9%E5%9F%BA%E5%9C%B097&site=cntaobao&kJYNcf'},
+                 'sku_props': [{'pid': '21241',
+                                'prop_name': '动物性别',
+                                'values': [{'imageUrl': None,
+                                            'name': '母',
+                                            'vid': '9999473'},
+                                           {'imageUrl': None,
+                                            'name': '公',
+                                            'vid': '3873886'}]},
+                               {'pid': '1627207',
+                                'prop_name': '颜色分类',
+                                'values': [{'imageUrl': None,
+                                            'name': '白色',
+                                            'vid': '28320'}]},
+                               {'pid': '122276097',
+                                'prop_name': '宠物年龄',
+                                'values': [{'imageUrl': None,
+                                            'name': '幼年犬(45日龄-12月龄)',
+                                            'vid': '97077986'}]}],
+                 'skus': [{'origin_price': '1500.0',
+                           'props_ids': '21241:9999473;1627207:28320;122276097:97077986',
+                           'props_names': '动物性别:母;颜色分类:白色;宠物年龄:幼年犬(45日龄-12月龄)',
+                           'sale_price': '300.0',
+                           'skuid': '5209138662206',
+                           'stock': 200,
+                           'sub_price': None,
+                           'sub_price_type': 'discounted price'},
+                          {'origin_price': '1500.0',
+                           'props_ids': '21241:3873886;1627207:28320;122276097:97077986',
+                           'props_names': '动物性别:公;颜色分类:白色;宠物年龄:幼年犬(45日龄-12月龄)',
+                           'sale_price': '300.0',
+                           'skuid': '5209138662207',
+                           'stock': 200,
+                           'sub_price': None,
+                           'sub_price_type': 'discounted price'}],
+                 'title': '纯种比熊幼犬长不大不掉毛飞耳法国比熊犬小型犬茶杯犬活体宠物狗',
+                 'video_url': 'http://cloud.video.taobao.com/play/u/p/1/e/6/t/1/419427855174.mp4'},
+        'msg': 'success'
     }
 
     # Extract relevant data from the JSON response
@@ -852,6 +1039,7 @@ def detailValueV2(linkDetail: str, title : str):
     product_props = data["data"].get("product_props", [])
     sku_props = data["data"].get("sku_props", [])
     skus = data["data"].get("skus", [])
+    product_id = data["data"].get("item_id", -1)
 
     # Translate the elements in product_props list
     translated_product_props = [translate_text(prop, constants.VIETNAMESE) for prop in product_props]
@@ -873,6 +1061,317 @@ def detailValueV2(linkDetail: str, title : str):
             translated_sku["props_names"] = ';'.join(translated_props)
         translated_skus.append(translated_sku)
 
-    product_dto = ProductDetailDto.ProductDto(title, product_url, main_imgs, translated_product_props, translated_sku_props, translated_skus)
+    product_dto = ProductDetailDto.ProductDto(product_id, title, product_url, main_imgs, translated_product_props,
+                                              translated_sku_props, translated_skus)
+
+    save_detail_product(product_dto)
 
     return product_dto
+
+
+def save_detail_product(product: object):
+    if product == "" or product is None:
+        return "Object is empty"
+
+    session = database.SessionLocal()
+
+    if session == "" or session is None:
+        return "Session is empty"
+
+    try:
+        product = models.Detail(
+            n_id=product._nid,
+            name=product._title,  # Translate the title using your translation API
+            product_url=product._product_url,
+            main_imgs=json.dumps(product._main_imgs),  # Convert list to JSON
+            product_props=json.dumps(product._product_props),  # Convert list to JSON
+            sku_props=json.dumps(product._sku_props),  # Convert list to JSON
+            skus=json.dumps(product._skus)  # Convert list to JSON
+        )
+        session.add(product)
+
+        session.commit()
+        print("Data saved")
+    except Exception as e:
+        session.rollback()
+        print(f"An error occurred: {e}")
+    finally:
+        session.close()
+
+
+def get_product_detail(product_url):
+    if product_url == "" or product_url is None:
+        return "Url is empty"
+
+    session = database.SessionLocal()
+
+    if session == "" or session is None:
+        return "Session is empty"
+
+    try:
+        product = session.query(models.Detail).filter_by(product_url=product_url).first()
+
+        if product == "" or product is None:
+            return "Product is empty"
+
+        product_props = json.loads(product.product_props)
+        skus = json.loads(product.skus)
+        skus_props = json.loads(product.sku_props)
+        main_imgs = json.loads(product.main_imgs)
+
+        product_data = ProductDetailDto.ProductDto(
+            nid=product.n_id,
+            title=product.name,
+            product_url=product.product_url,
+            main_imgs=main_imgs,
+            product_props=product_props,
+            sku_props=skus_props,
+            skus=skus
+        )
+
+        return product_data
+    except Exception as e:
+        session.rollback()
+        print(f"An error occurred: {e}")
+    finally:
+        session.close()
+
+
+def get_product_by_id(id):
+    session = database.SessionLocal()
+
+    if session == "" or session is None:
+        return "Session is empty"
+
+    id = session.query(models.SearchProduct).filter_by(product_id=id).first()
+
+    if id == "" or id is None:
+        return ""
+
+    return id
+
+
+def detailV2(id):
+    global detail_link_value
+
+    if id == "" or id is None:
+        return "Id is empty"
+
+    product = get_product_by_id(id)
+
+    if product == "" or product is None:
+        return "Product is not existed"
+
+    cookie_parameters = {
+        'JSESSIONID': 'A5EA6A1FC6ED9491E8BFE168344D9E7C',
+        '_cc_': 'VFC%2FuZ9ajQ%3D%3D',
+        '_nk_': 'tb627551502528',
+        '_samesite_flag_': 'true',
+        '_tb_token_': 'ee73d9beb6709',
+        'atpsida': 'c1ba942fb3fe1cbf03e466a6_1690536928_9',
+        'aui': '2216209135380',
+        '_tb_token_': '3e3868656177',
+        'cancelledSubSites': 'empty',
+        'cna': 'NVhKHQx8pxABASABDuD094HA',
+        'cna': 'NVhKHQx8pxABASABDuD094HA',
+        'cnaui': '2216209135380',
+        'cookie1': 'AimSwy6Hu0cjkXBiNAEvUR5yUCjEb50QirZe9OQR8JM%3D',
+        'cookie17': 'UUpgQEvyiTEr4C708g%3D%3D',
+        'cookie2': '17baa001cddd95eeac0d14215754e2ba',
+        'csg': 'c5ccb5b5',
+        'dnk': 'tb627551502528',
+        'existShop': 'MTY5MDUzNTUyMQ%3D%3D',
+        'isg': 'BC4udLbkxtq_uDKu-9jGYYETf4TwL_Ipj4a_J1j3mTHsO86VwL6yOUI587_X4-pB',
+        'l': 'fBIQOzNINiq0KI6SBOfZFurza779IIRAguPzaNbMi9fP911p5XodW1O06889CnMNFssBR38PiVPBBeYBqIv4n5U62j-la_HmnmOk-Wf..',
+        'lgc': 'tb627551502528',
+        'sca': '2ce1ff46',
+        'sg': '807',
+        'sgcookie': 'E1004mNHjdedFCalsA3%2BDwxBbDVzpPHNcfgCxQwpMn8WChT8qXmCxiXv2GtRWHqACR5GrqBtYgklE3nsJQ6iHc00COBH86rxO%2FnNB1FZN0UAlGA%3D',
+        'skt': '5f59a84349d9041e',
+        't': '6b6122a7cb9e97ce82d19b64b5cfa46b',
+        'tbsa': '106e86f4144675054773332d_1690536928_9',
+        'tfstk': 'd-N9HuZeMMjGzUMYGVBhgivTTP_hK5UNjlzWimmMhkELlDAc7fXqMonL0cDi1cAxMrE4moUV7qibcon0I9fu7PlqGgcAZ_4aQqlfq1ChKNaZgjsk-I6lwPrygXCFUn1fYdpww7Fx5t_FmoxTl5gtBmpivIdfoVHtVPidVg6a47VJxp-o2qv1Jwp23AgFr-S5t',
+        'tracknick': 'tb627551502528',
+        'uc1': 'cookie21=Vq8l%2BKCLiYYu&cookie14=Uoe9bfibByxgsA%3D%3D&cookie15=U%2BGCWk%2F75gdr5Q%3D%3D&existShop=false&pas=0&cookie16=WqG3DMC9UpAPBHGz5QBErFxlCA%3D%3D',
+        'uc3': 'nk2=F5RDLjqWCLCCNe6Q0ac%3D&vt3=F8dCsGCg2j4K6APJSMg%3D&lg2=UIHiLt3xD8xYTw%3D%3D&id2=UUpgQEvyiTEr4C708g%3D%3D',
+        'uc4': 'id4=0%40U2gqz6QY%2B2LU45CVgCnTHhyjgZBJlJ9d&nk4=0%40FY4I7WSY2SzxeSCD9wJSplBYHJwWmW5zVQ%3D%3D',
+        'x5sec': '7b22617365727665723b32223a226539313338386538643739643266303964613031653838663861323366623766434f4b4d6a71594745506e57343658446c59476b65786f504d6a49784e6a49774f54457a4e544d344d4473324d4f79586a4e4d4451414d3d227d',
+        'xlly_s': '1',
+    }
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; Trident/7.0; AS; rv:11.0) like Gecko'
+    }
+    url = "https://detail.tmall.com/item.htm?abbucket=12&id=721850641742&ns=1&skuId=5067873984690"
+
+    response = requests.get(url, headers=headers, cookies=cookie_parameters)
+    if response.status_code != 200:
+        return "Fail when getting value"
+    html = response.text
+
+    print(html)
+
+    # # Parse the HTML using BeautifulSoup
+    # soup = BeautifulSoup(html, 'html.parser')
+    #
+    # # Find the <h3> tag with class 'tb-main-title' and get the value of data-title attribute
+    # title = Translator().translate(soup.find('h3', class_='tb-main-title')['data-title'], src=constants.CHINESE,
+    #                                dest=constants.VIETNAMESE).text
+    #
+    # script_tags = soup.find_all("script")
+    # for script_tag in script_tags:
+    #     script_content = script_tag.string
+    #     if script_content and "Hub.config.set" in script_content:
+    #         start_index = script_content.find("wholeSibUrl      : '")
+    #         end_index = script_content.find("tradeContract',")
+    #         json_content = script_content[start_index + 20: end_index]
+    #         detail_link_value = "https:" + json_content
+    #
+    # product = detailValueV2(detail_link_value, title)
+
+    return product
+
+def deleteById(id):
+
+    if id == "" or id is None:
+        return "id is empty"
+
+    session = database.SessionLocal()
+
+    if session == "" or session is None:
+        return "Session is empty"
+
+    try:
+
+        record = session.query(models.SearchProduct).filter_by(product_id=id).first()
+
+        print(record)
+
+        if record == "" or record is None:
+            return "Product is not existed"
+
+        session.delete(record)
+        session.commit()
+
+        return "Record has been deleted"
+
+    except Exception as e:
+        session.rollback()
+        print(f"An error occurred: {e}")
+    finally:
+        session.close()
+
+def add_to_cart(data):
+
+    if data == "" or data is None:
+        return "Data is empty"
+
+    if data.price < 0 or data.price is None:
+        return "Price is invalid"
+
+    if data.quantity < 0 or data.quantity is None:
+        return "Quantity is invalid"
+
+    session = database.SessionLocal()
+
+    try:
+        if session == "" or session is None:
+            return "Session is empty"
+
+        # Get the product detail
+        detail = session.query(models.Detail).filter_by(n_id=data.n_id).first()
+
+        if detail == "" or detail is None:
+            return "Detail product is empty"
+
+            # Check if the user already has a cart
+        existing_cart = session.query(models.Cart).filter_by(username=data.username).first()
+
+        if not existing_cart:
+            # Create a new cart for the user
+            new_cart = models.Cart(username=data.username)
+            session.add(new_cart)
+            session.commit()
+            existing_cart = new_cart
+
+        existing_cart_item = session.query(models.CartItem).filter_by(cart=existing_cart, n_id=data.n_id).first()
+
+        if existing_cart_item:
+            # Update the existing cart item's n_id, price, quantity, and total_price
+            existing_cart_item.n_id = detail.n_id
+            existing_cart_item.price = data.price
+            existing_cart_item.quantity = data.quantity
+            existing_cart_item.total_price = Decimal(data.price) * Decimal(data.quantity)
+        else:
+            cart_item = models.CartItem(
+                cart=existing_cart,
+                name=detail.name,
+                n_id=detail.n_id,
+                price=Decimal(data.price),
+                quantity=Decimal(data.quantity),
+                total_price=Decimal(data.price) * Decimal(data.quantity),
+            )
+            session.add(cart_item)
+
+        # Update the total_price in the Cart table
+        existing_cart.total_price = sum(cart_item.total_price for cart_item in existing_cart.cart_items)
+
+        session.commit()
+
+    except Exception as e:
+        session.rollback()
+        print("Error: " + str(e))
+        return "An error occurred while adding to cart"
+    finally:
+        session.close()
+
+    return "Item added to cart successfully"
+
+def get_cart_with_items(username):
+
+    if username == "" or username is None:
+        return "Username is empty"
+
+    session = database.SessionLocal()
+
+    try:
+
+        if session == "" or session is None:
+            return "Session is empty"
+
+        cart = session.query(models.Cart).filter_by(username=username).first()
+
+        if cart == "" or cart is None:
+            return "Cart is not existed"
+
+        # Load the associated cart items
+        cart_items = cart.cart_items
+
+        if cart_items == "" or cart_items is None:
+            return "Cart items is empty"
+
+        # Serialize the cart and cart items
+        cart_data = {
+            "cart_id": cart.id,
+            "username": cart.username,
+            "total_price": str(cart.total_price),  # Convert Decimal to string for JSON serialization
+            "cart_items": [
+                {
+                    "id": item.id,
+                    "name": item.name,
+                    "n_id": item.n_id,
+                    "price": str(item.price),
+                    "quantity": str(item.quantity),
+                    "total_price": str(item.total_price)
+                }
+                for item in cart_items
+            ]
+        }
+
+        return cart_data
+
+    except Exception as e:
+        print("Error: " + str(e))
+    finally:
+        session.close()
+
+    return None

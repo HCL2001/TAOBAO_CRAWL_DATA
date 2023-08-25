@@ -2,7 +2,8 @@ from googletrans import Translator
 import constants
 
 class ProductDto:
-    def __init__(self, title, product_url, main_imgs, product_props, sku_props, skus):
+    def __init__(self, nid, title, product_url, main_imgs, product_props, sku_props, skus):
+        self._nid = nid
         self._title = title
         self._product_url = product_url
         self._main_imgs = main_imgs
@@ -23,17 +24,17 @@ class ProductDto:
         # self._sku_props = [self.translate_text(prop, target_language) for prop in self._sku_props]
 
     # Getter methods with translation
-    def get_title(self, target_language):
-        return self.translate_text(self._title, target_language)
+    def get_title(self):
+        return self._title
 
     def get_main_imgs(self):
         return self._main_imgs
 
-    def get_product_props(self, target_language):
-        return [self.translate_text(prop, target_language) for prop in self._product_props]
+    def get_product_props(self):
+        return self._product_props
 
-    def get_sku_props(self, target_language):
-        return [self.translate_text(prop, target_language) for prop in self._sku_props]
+    def get_sku_props(self):
+        return self._sku_props
 
     def get_skus(self):
         return self._skus
